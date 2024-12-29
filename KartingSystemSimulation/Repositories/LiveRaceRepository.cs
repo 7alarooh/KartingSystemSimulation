@@ -2,7 +2,7 @@
 
 namespace KartingSystemSimulation.Repositories
 {
-    public class LiveRaceRepository
+    public class LiveRaceRepository : ILiveRaceRepository
     {
         private readonly ApplicationDbContext _context;
 

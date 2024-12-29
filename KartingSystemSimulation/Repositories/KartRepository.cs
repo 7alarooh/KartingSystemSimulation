@@ -2,7 +2,7 @@
 
 namespace KartingSystemSimulation.Repositories
 {
-    public class KartRepository
+    public class KartRepository : IKartRepository
     {
         private readonly ApplicationDbContext _context;
 

@@ -2,7 +2,8 @@
 
 namespace KartingSystemSimulation.Repositories
 {
-    public class AdminRepository // Handles CRUD operations for Admin entities
+    public class AdminRepository : IAdminRepository
+    // Handles CRUD operations for Admin entities
     {
         private readonly ApplicationDbContext _context; // EF Core database context
 

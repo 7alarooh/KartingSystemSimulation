@@ -2,7 +2,7 @@
 
 namespace KartingSystemSimulation.Repositories
 {
-    public class SupervisorRacerRepository
+    public class SupervisorRacerRepository : ISupervisorRacerRepository
     {
         private readonly ApplicationDbContext _context;
 

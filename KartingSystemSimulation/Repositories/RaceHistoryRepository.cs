@@ -2,7 +2,7 @@
 
 namespace KartingSystemSimulation.Repositories
 {
-    public class RaceHistoryRepository
+    public class RaceHistoryRepository : IRaceHistoryRepository
     {
         private readonly ApplicationDbContext _context;
 
