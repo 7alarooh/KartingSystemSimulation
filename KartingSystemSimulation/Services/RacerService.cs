@@ -23,15 +23,15 @@ namespace KartingSystemSimulation.Services
 
         public IEnumerable<Racer> GetAll()
         {
-            return _racerRepository.GetAll();
+            return _racerRepository.GetAllRacers();
         }
 
         public Racer GetById(int racerId)
         {
-            return _racerRepository.GetById(racerId);
+            return _racerRepository.GetRacerById(racerId);
         }
 
-        public void Add(Racer racer, int currentUserId)
+        public void AddRacer(Racer racer, int currentUserId)
         {
             // Check if first name and last name are the same
             if (racer.FirstName == racer.LastName)
@@ -47,7 +47,7 @@ namespace KartingSystemSimulation.Services
             }
 
             // Add the new racer to the database
-            _racerRepository.Add(racer);
+            _racerRepository.AddRacer(racer);
         }
 
         public void Update(Racer racer)
@@ -66,14 +66,14 @@ namespace KartingSystemSimulation.Services
             }
 
             // Update the existing racer in the database
-            _racerRepository.Update(racer);
+            _racerRepository.UpdateRacer(racer);
         }
 
-        public void Delete(int racerId, int currentUserId)
+        public void DeleteRacer(int racerId, int currentUserId)
         {
             // Retrieve the current user (admin) details
-            var currentUser = _userRepository.GetById(currentUserId);  // Assuming we pass the currentUserId
-            var racer = _racerRepository.GetById(racerId);
+            var currentUser = _userRepository.GetUserById(currentUserId);  // Assuming we pass the currentUserId
+            var racer = _racerRepository.GetRacerById(racerId);
 
             if (racer == null)
             {
@@ -94,10 +94,10 @@ namespace KartingSystemSimulation.Services
             {
                 throw new UnauthorizedAccessException("Only admins can delete racers.");
             }
-            var racer = _repository.GetById(racerId);
+            var racer = _repository.GetRacerById(racerId);
             if (racer != null)
             {
-                _repository.Delete(racer); // Perform the deletion
+                _repository.DeleteRacer(racer); // Perform the deletion
             }
         }
     }
