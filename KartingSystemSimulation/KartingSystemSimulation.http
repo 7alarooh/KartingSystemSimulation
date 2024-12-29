@@ -1,0 +1,6 @@
+@KartingSystemSimulation_HostAddress = http://localhost:5003
+
+GET {{KartingSystemSimulation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
