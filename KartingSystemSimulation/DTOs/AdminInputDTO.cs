@@ -2,7 +2,7 @@
 
 namespace KartingSystemSimulation.DTOs
 {
-    public class AdminDTO
+    public class AdminInputDTO
     {
         [Required(ErrorMessage = "AdminId is required.")]
         public int AdminId { get; set; } // Primary key
@@ -33,6 +33,6 @@ namespace KartingSystemSimulation.DTOs
 
         [Required(ErrorMessage = "State is required.")]
         [StringLength(50, ErrorMessage = "State name cannot be longer than 50 characters.")]
-        public string State { get; set; } // State of residence
+        public string Address { get; set; } // Address of residence
     }
 }
