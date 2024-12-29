@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Net;
+using KartingSystemSimulation.Enums;
 
 namespace KartingSystemSimulation.Models
 {
@@ -12,8 +14,8 @@ namespace KartingSystemSimulation.Models
         public string CivilId { get; set; } // Unique
         public string Email { get; set; } // Foreign Key to User (PK in User)
         public DateTime DOB { get; set; }
-        public string Gender { get; set; } // ENUM: MALE/FEMALE
-        public string State { get; set; }
+        public Gender Gender { get; set; } // Changed from string to Enum
+        public Address Address { get; set; }
         public bool AgreedToRules { get; set; }
         public byte[] Picture { get; set; } // BLOB
         public string Membership { get; set; } // ENUM: GOLD/DIAMOND/NORMAL
@@ -26,9 +28,6 @@ namespace KartingSystemSimulation.Models
         public Supervisor Supervisor { get; set; } // Navigation Property
         public Kart AssignedKart { get; set; } // Navigation Property
         public LiveRace LiveRace { get; set; } // Navigation Property
-        // Added navigation property for RaceHistories
         public ICollection<RaceHistory> RaceHistories { get; set; } // Navigation Property
-
     }
 }
-

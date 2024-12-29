@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.Models
 {
@@ -6,7 +7,7 @@ namespace KartingSystemSimulation.Models
     {
         [Key]
         public int KartId { get; set; } // Primary Key
-        public string Type { get; set; } // e.g., Kids, Adults
+        public KartType KartType { get; set; } // e.g., Kids, Adults
         public bool Availability { get; set; }
     }
 }

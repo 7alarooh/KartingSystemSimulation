@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.Models
 {
@@ -7,6 +8,6 @@ namespace KartingSystemSimulation.Models
         [Key]
         public string LoginEmail { get; set; } // Primary Key
         public string LoginPassword { get; set; } // Hashed Password
-        public string Role { get; set; } // ENUM: Admin, Racer, Supervisor
+        public Role Role { get; set; } // ENUM: Admin, Racer, Supervisor
     }
 }
