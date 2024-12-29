@@ -2,7 +2,7 @@
 
 namespace KartingSystemSimulation.Repositories
 {
-    public class AdminRepository
+    public class AdminRepository// This is to handle Admin Repository
     {
         private readonly ApplicationDbContext _context;
 
