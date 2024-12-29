@@ -2,9 +2,10 @@
 {
     public enum KartType
     {
-        Electric,
-        Gasoline,
-        DualPower,
-        Kids
+        
+        
+        Kids,
+        Adults,
+        Couples
     }
 }
