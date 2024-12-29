@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.DTOs
 {
@@ -26,12 +27,10 @@ namespace KartingSystemSimulation.DTOs
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; } // Validated email
 
-        [Required(ErrorMessage = "Gender is required.")]
-        [StringLength(10, ErrorMessage = "Gender cannot be longer than 10 characters.")]
-        public string Gender { get; set; } // Gender
-
-        [Required(ErrorMessage = "State is required.")]
-        [StringLength(50, ErrorMessage = "State name cannot be longer than 50 characters.")]
-        public string Address { get; set; } // Address of residence
+        [Required(ErrorMessage = "Gender is required.")] 
+        public Gender Gender { get; set; } 
+        
+        [Required(ErrorMessage = "Address is required.")]
+        public Address Address { get; set; } // Updated to use Enum
     }
 }
