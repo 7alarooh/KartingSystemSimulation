@@ -4,8 +4,7 @@ namespace KartingSystemSimulation.DTOs
 {
     public class AdminInputDTO
     {
-        [Required(ErrorMessage = "AdminId is required.")]
-        public int AdminId { get; set; } // Primary key
+        
 
         [Required(ErrorMessage = "First name is required.")]
         [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]

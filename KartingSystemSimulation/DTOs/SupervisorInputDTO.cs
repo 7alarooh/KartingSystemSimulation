@@ -4,8 +4,7 @@ namespace KartingSystemSimulation.DTOs
 {
     public class SupervisorInputDTO
     {
-        [Required(ErrorMessage = "SupervisorId is required.")]
-        public int SupervisorId { get; set; } // Primary key
+        
 
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters.")]
