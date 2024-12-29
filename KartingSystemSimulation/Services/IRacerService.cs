@@ -7,8 +7,8 @@ namespace KartingSystemSimulation.Services
         void AddRacer(Racer racer, int currentUserId);
         void DeleteRacer(int racerId, int currentUserId);
         void DeleteRacer(int racerId, string role);
-        IEnumerable<Racer> GetAll();
-        Racer GetById(int racerId);
-        void Update(Racer racer);
+        IEnumerable<Racer> GetAllRacers();
+        Racer GetRacerById(int racerId);
+        void UpdateRacer(Racer racer);
     }
 }

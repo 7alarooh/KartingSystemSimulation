@@ -21,12 +21,12 @@ namespace KartingSystemSimulation.Services
             _userRepository = userRepository;
         }
 
-        public IEnumerable<Racer> GetAll()
+        public IEnumerable<Racer> GetAllRacers()
         {
             return _racerRepository.GetAllRacers();
         }
 
-        public Racer GetById(int racerId)
+        public Racer GetRacerById(int racerId)
         {
             return _racerRepository.GetRacerById(racerId);
         }
@@ -34,40 +34,58 @@ namespace KartingSystemSimulation.Services
         public void AddRacer(Racer racer, int currentUserId)
         {
             // Check if first name and last name are the same
-            if (racer.FirstName == racer.LastName)
+            if (racer.FirstName.Equals(racer.LastName, StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException("First name and last name cannot be the same.");
             }
 
             // Check if age is at least 6 years old
-            var age = DateTime.Now.Year - racer.DOB.Year;
+            var today = DateTime.Today;
+            var age = today.Year - racer.DOB.Year;
+            if (racer.DOB.Date > today.AddYears(-age)) age--; // Adjust for birth date not yet reached in current year
+
             if (age < 6)
             {
                 throw new InvalidOperationException("Racer must be at least 6 years old.");
             }
 
-            // Add the new racer to the database
+            // Assign the current user ID as the creator
+            racer.SupervisorId = currentUserId;
+
+            // Save the racer to the database
             _racerRepository.AddRacer(racer);
         }
 
-        public void Update(Racer racer)
+
+        public void UpdateRacer(Racer racer)
         {
             // Check if first name and last name are the same
-            if (racer.FirstName == racer.LastName)
+            if (racer.FirstName.Equals(racer.LastName, StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException("First name and last name cannot be the same.");
             }
 
             // Check if age is at least 6 years old
-            var age = DateTime.Now.Year - racer.DOB.Year;
+            var today = DateTime.Today;
+            var age = today.Year - racer.DOB.Year;
+            if (racer.DOB.Date > today.AddYears(-age)) age--; // Adjust for birth date not yet reached in current year
+
             if (age < 6)
             {
                 throw new InvalidOperationException("Racer must be at least 6 years old.");
             }
 
-            // Update the existing racer in the database
+            // Ensure racer exists in the database before updating
+            var existingRacer = _racerRepository.GetRacerById(racer.RacerId);
+            if (existingRacer == null)
+            {
+                throw new InvalidOperationException("Racer not found.");
+            }
+
+            // Perform the update in the repository
             _racerRepository.UpdateRacer(racer);
         }
+
 
         public void DeleteRacer(int racerId, int currentUserId)
         {
