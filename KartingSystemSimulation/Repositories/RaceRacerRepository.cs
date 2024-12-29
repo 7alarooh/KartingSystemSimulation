@@ -13,13 +13,13 @@ namespace KartingSystemSimulation.Repositories
 
         public IEnumerable<RaceRacer> GetAll() => _context.RaceRacers.ToList();
         public RaceRacer GetById(int raceId, int racerId)
-            => _context.RaceRacers.Find(raceId, racerId);
-        public void Add(RaceRacer raceRacer)
+            => _context.RaceRacers.Find(raceId, racerId);// Retrieves a specific RaceRacer entity by its raceId and racerId
+        public void Add(RaceRacer raceRacer)// Adds a new RaceRacer entity to the database
         {
             _context.RaceRacers.Add(raceRacer);
             _context.SaveChanges();
         }
-        public void Delete(RaceRacer raceRacer)
+        public void Delete(RaceRacer raceRacer)// Deletes a RaceRacer entity from the database
         {
             _context.RaceRacers.Remove(raceRacer);
             _context.SaveChanges();
