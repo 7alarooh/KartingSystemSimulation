@@ -2,7 +2,7 @@
 
 namespace KartingSystemSimulation.DTOs
 {
-    public class SupervisorDTO
+    public class SupervisorInputDTO
     {
         [Required(ErrorMessage = "SupervisorId is required.")]
         public int SupervisorId { get; set; } // Primary key
