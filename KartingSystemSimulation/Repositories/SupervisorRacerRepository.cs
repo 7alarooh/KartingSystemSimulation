@@ -11,15 +11,15 @@ namespace KartingSystemSimulation.Repositories
             _context = context;
         }
 
-        public IEnumerable<SupervisorRacer> GetAll() => _context.SupervisorRacers.ToList();
-        public SupervisorRacer GetById(int supervisorId, int racerId)
+        public IEnumerable<SupervisorRacer> GetAllSupervisorRacers() => _context.SupervisorRacers.ToList();
+        public SupervisorRacer GetSupervisorRacerById(int supervisorId, int racerId)
             => _context.SupervisorRacers.Find(supervisorId, racerId);
-        public void Add(SupervisorRacer supervisorRacer)
+        public void AddSupervisorRacer(SupervisorRacer supervisorRacer)
         {
             _context.SupervisorRacers.Add(supervisorRacer);
             _context.SaveChanges();
         }
-        public void Delete(SupervisorRacer supervisorRacer)
+        public void DeleteSupervisorRacer(SupervisorRacer supervisorRacer)
         {
             _context.SupervisorRacers.Remove(supervisorRacer);
             _context.SaveChanges();

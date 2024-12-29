@@ -11,21 +11,21 @@ namespace KartingSystemSimulation.Repositories
         {
             _context = context;
         }
-        
 
-        public IEnumerable<Leaderboard> GetAll() => _context.Leaderboards.ToList();
-        public Leaderboard GetById(int leaderboardId) => _context.Leaderboards.Find(leaderboardId);
-        public void Add(Leaderboard leaderboard)
+
+        public IEnumerable<Leaderboard> GetAllLeaderboards() => _context.Leaderboards.ToList();
+        public Leaderboard GetLeaderboardById(int leaderboardId) => _context.Leaderboards.Find(leaderboardId);
+        public void AddLeaderboard(Leaderboard leaderboard)
         {
             _context.Leaderboards.Add(leaderboard);// Adds a new Leaderboard entity to the database
             _context.SaveChanges();
         }
-        public void Update(Leaderboard leaderboard)// Updates an existing Leaderboard entity in the database
+        public void UpdateLeaderboard(Leaderboard leaderboard)// Updates an existing Leaderboard entity in the database
         {
             _context.Leaderboards.Update(leaderboard);
             _context.SaveChanges();
         }
-        public void Delete(Leaderboard leaderboard)// Deletes a Leaderboard entity from the database
+        public void DeleteLeaderboard(Leaderboard leaderboard)// Deletes a Leaderboard entity from the database
         {
             _context.Leaderboards.Remove(leaderboard);
             _context.SaveChanges();

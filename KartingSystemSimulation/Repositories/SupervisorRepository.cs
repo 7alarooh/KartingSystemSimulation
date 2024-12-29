@@ -11,23 +11,23 @@ namespace KartingSystemSimulation.Repositories
             _context = context;
         }
 
-        public IEnumerable<Supervisor> GetAll() => _context.Supervisors.ToList(); // Retrieves all Supervisor entities from the database
+        public IEnumerable<Supervisor> GetAllSupervisors() => _context.Supervisors.ToList(); // Retrieves all Supervisor entities from the database
 
-        public Supervisor GetById(int supervisorId) => _context.Supervisors.Find(supervisorId); // Retrieves a specific Supervisor entity by its ID
+        public Supervisor GetSupervisorById(int supervisorId) => _context.Supervisors.Find(supervisorId); // Retrieves a specific Supervisor entity by its ID
 
-        public void Add(Supervisor supervisor) // Adds a new Supervisor entity to the database
+        public void AddSupervisor(Supervisor supervisor) // Adds a new Supervisor entity to the database
         {
             _context.Supervisors.Add(supervisor); // Adds the supervisor to the context
             _context.SaveChanges(); // Saves changes to the database
         }
 
-        public void Update(Supervisor supervisor) // Updates an existing Supervisor entity in the database
+        public void UpdateSupervisor(Supervisor supervisor) // Updates an existing Supervisor entity in the database
         {
             _context.Supervisors.Update(supervisor); // Updates the supervisor in the context
             _context.SaveChanges(); // Saves changes to the database
         }
 
-        public void Delete(Supervisor supervisor) // Deletes a Supervisor entity from the database
+        public void DeleteSupervisor(Supervisor supervisor) // Deletes a Supervisor entity from the database
         {
             _context.Supervisors.Remove(supervisor); // Removes the supervisor from the context
             _context.SaveChanges(); // Saves changes to the database

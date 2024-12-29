@@ -11,19 +11,19 @@ namespace KartingSystemSimulation.Repositories
             _context = context;
         }
 
-        public IEnumerable<Game> GetAll() => _context.Games.ToList();// Retrieves all Game entities from the database
-        public Game GetById(int gameId) => _context.Games.Find(gameId);// Retrieves a specific Game entity by its ID
-        public void Add(Game game)// Adds a new Game entity to the database
+        public IEnumerable<Game> GetAllGames() => _context.Games.ToList();// Retrieves all Game entities from the database
+        public Game GetGameById(int gameId) => _context.Games.Find(gameId);// Retrieves a specific Game entity by its ID
+        public void AddGame(Game game)// Adds a new Game entity to the database
         {
             _context.Games.Add(game);// Adds the game to the context
             _context.SaveChanges();// Saves changes to the database
         }
-        public void Update(Game game)// Updates an existing Game entity in the database
+        public void UpdateGame(Game game)// Updates an existing Game entity in the database
         {
             _context.Games.Update(game);
             _context.SaveChanges();
         }
-        public void Delete(Game game)// Deletes a Game entity from the database
+        public void DeleteGame(Game game)// Deletes a Game entity from the database
         {
             _context.Games.Remove(game);
             _context.SaveChanges();
