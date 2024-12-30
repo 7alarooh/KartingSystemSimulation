@@ -38,6 +38,7 @@ namespace KartingSystemSimulation
             builder.Services.AddScoped<IAdminService, AdminService>();
             builder.Services.AddScoped<IRegisterService, RegisterService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ISupervisorService, SupervisorService>();
 
             // AutoMapper configuration
             builder.Services.AddAutoMapper(typeof(Program));
