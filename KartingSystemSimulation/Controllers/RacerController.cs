@@ -2,88 +2,90 @@
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace KartingSystemSimulation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/racers")]
     public class RacerController : ControllerBase
     {
         private readonly IRacerService _racerService;
 
         public RacerController(IRacerService racerService)
         {
-            _racerService = racerService;
+            _racerService = racerService; // Initialize racer service
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<Racer>> GetAllRacer()
+        // Add a new racer
+        [HttpPost]
+        public IActionResult AddRacer([FromBody] RacerInputDTO racerInput)
         {
-            return Ok(_racerService.GetAllRacers());
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Return validation errors
+            }
+            Console.WriteLine(JsonConvert.SerializeObject(racerInput));
+
+            _racerService.AddRacer(racerInput);
+            return Ok("Racer added successfully.");
         }
 
+        // Get racer by ID
         [HttpGet("{id}")]
-        public ActionResult<Racer> GetRacerById(int id)
+        public IActionResult GetRacerById(int id)
         {
-            var racer = _racerService.GetRacerById(id);
-            if (racer == null)
+            try
             {
-                return NotFound();
+                var racer = _racerService.GetRacerById(id);
+                return Ok(racer);
             }
-            return Ok(racer);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
-        //[HttpPost]
-        //public IActionResult AddRacer([FromBody] RacerInputDTO racerDto)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
+        // Get all racers
+        [HttpGet]
+        public IActionResult GetAllRacers()
+        {
+            var racers = _racerService.GetAllRacers();
+            return Ok(racers);
+        }
 
-        //    try
-        //    {
-        //        //// You can replace 1 with a dynamic value from the logged-in user
-        //        //_racerService.AddRacer(racerDto, currentUserId: 1);
-        //        //return Ok("Racer added successfully.");
-        //    }
-        //    catch (InvalidOperationException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-
+        // Update racer
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Racer racer)
+        public IActionResult UpdateRacer(int id, [FromBody] RacerInputDTO racerInput)
         {
-            if (id != racer.RacerId)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Racer ID mismatch.");
+                return BadRequest(ModelState); // Return validation errors
             }
 
             try
             {
-                _racerService.UpdateRacer(racer);
-                return NoContent();
+                _racerService.UpdateRacer(id, racerInput);
+                return Ok("Racer updated successfully.");
             }
-            catch (InvalidOperationException ex)
+            catch (KeyNotFoundException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
 
+        // Delete racer
         [HttpDelete("{id}")]
-        public IActionResult DeleteRacer(int id, string role)
+        public IActionResult DeleteRacer(int id)
         {
             try
             {
-                _racerService.DeleteRacer(id, role);
-                return NoContent();
+                _racerService.DeleteRacer(id);
+                return Ok("Racer deleted successfully.");
             }
-            catch (InvalidOperationException ex)
+            catch (KeyNotFoundException ex)
             {
-                return BadRequest(ex.Message);
+                return NotFound(ex.Message);
             }
         }
     }

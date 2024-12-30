@@ -1,15 +1,13 @@
 ﻿using KartingSystemSimulation.DTOs;
-using KartingSystemSimulation.Models;
 
 namespace KartingSystemSimulation.Services
 {
     public interface IRacerService
     {
-        void AddRacer(RacerInputDTO racerDto, int currentUserId);
-        void DeleteRacer(int racerId, int currentUserId);
-        void DeleteRacer(int racerId, string role);
-        IEnumerable<Racer> GetAllRacers();
-        Racer GetRacerById(int racerId);
-        void UpdateRacer(Racer racer);
+        void AddRacer(RacerInputDTO racerInput);
+        void DeleteRacer(int id);
+        IEnumerable<RacerOutputDTO> GetAllRacers();
+        RacerOutputDTO GetRacerById(int id);
+        void UpdateRacer(int id, RacerInputDTO racerInput);
     }
 }
