@@ -5,7 +5,7 @@ namespace KartingSystemSimulation.DTOs
 {
     public class AdminInputDTO
     {
-        
+
 
         [Required(ErrorMessage = "First name is required.")]
         [StringLength(50, ErrorMessage = "First name cannot be longer than 50 characters.")]
@@ -27,9 +27,9 @@ namespace KartingSystemSimulation.DTOs
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; } // Validated email
 
-        [Required(ErrorMessage = "Gender is required.")] 
-        public Gender Gender { get; set; } 
-        
+        [Required(ErrorMessage = "Gender is required.")]
+        public Gender Gender { get; set; }
+
         [Required(ErrorMessage = "Address is required.")]
         public Address Address { get; set; } // Updated to use Enum
     }
