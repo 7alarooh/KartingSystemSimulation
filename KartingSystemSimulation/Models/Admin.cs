@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Net;
 using KartingSystemSimulation.Enums;
 
@@ -17,6 +18,8 @@ namespace KartingSystemSimulation.Models
         [Required]
         public string CivilId { get; set; } // Unique
         [EmailAddress]
+        
+        [ForeignKey("User")]
         public string Email { get; set; } //Foreign Key to User (PK in User)
         [Required]
         public Gender Gender { get; set; } // Changed from string to Enum
