@@ -1,6 +1,90 @@
-﻿namespace KartingSystemSimulation.Services
+﻿using AutoMapper;
+using KartingSystemSimulation.DTOs;
+using KartingSystemSimulation.Enums;
+using KartingSystemSimulation.Models;
+using KartingSystemSimulation.Repositories;
+
+namespace KartingSystemSimulation.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
+        private readonly IUserRepository _userRepository;
+        private readonly IAdminRepository _adminRepository;
+        private readonly IMapper _mapper;
+
+        public UserService(IUserRepository userRepository, IAdminRepository adminRepository, IMapper mapper)
+        {
+            _userRepository = userRepository;
+            _adminRepository = adminRepository;
+            _mapper = mapper;
+        }
+
+        public IEnumerable<UserOutputDTO> GetAll()
+        {
+            var users = _userRepository.GetAllUsers();
+            return _mapper.Map<IEnumerable<UserOutputDTO>>(users);
+        }
+
+        public UserOutputDTO GetById(int userId)
+        {
+            var user = _userRepository.GetUserById(userId);
+            if (user == null)
+                throw new KeyNotFoundException("User not found.");
+            return _mapper.Map<UserOutputDTO>(user);
+        }
+
+        public void Add(UserInputDTO userDto)
+        {
+            if (!IsValidEmail(userDto.LoginEmail))
+                throw new ArgumentException("Invalid email format.");
+
+            var user = _mapper.Map<User>(userDto);
+            user.LoginPassword = HashPassword(userDto.Password); // Hash the password
+            _userRepository.AddUser(user);
+        }
+
+        public void Update(int userId, UserInputDTO userDto)
+        {
+            var existingUser = _userRepository.GetUserById(userId);
+            if (existingUser == null)
+                throw new KeyNotFoundException("User not found.");
+
+            if (!IsValidEmail(userDto.LoginEmail))
+                throw new ArgumentException("Invalid email format.");
+
+            _mapper.Map(userDto, existingUser);
+            _userRepository.UpdateUser(existingUser);
+        }
+
+        public void Delete(int userId, string adminEmail)
+        {
+            var user = _userRepository.GetUserById(userId);
+            if (user == null)
+                throw new KeyNotFoundException("User not found.");
+
+            var admin = _adminRepository.GetAllAdmins().FirstOrDefault(a => a.Email == adminEmail);
+            if (admin == null)
+                throw new UnauthorizedAccessException("Only an admin can delete a user.");
+
+            _userRepository.DeleteUser(user);
+        }
+
+        // Helper methods for validation and hashing
+        private bool IsValidEmail(string email)
+        {
+            return new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(email);
+        }
+
+        private string HashPassword(string password)
+        {
+            using var sha256 = System.Security.Cryptography.SHA256.Create();
+            var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return Convert.ToBase64String(hashedBytes);
+        }
+
+        private bool IsValidPassword(string password)
+        {
+            return password.Length >= 8; // Example: Ensure password has at least 8 characters
+        }
     }
 }
