@@ -2,8 +2,8 @@
 {
     public enum KartType
     {
-        
-        
+
+
         Kids,
         Adults,
         Couples

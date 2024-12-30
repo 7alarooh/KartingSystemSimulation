@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.DTOs
 {
@@ -10,7 +11,7 @@ namespace KartingSystemSimulation.DTOs
 
         [Required]
         [StringLength(50)]
-        public string KartType { get; set; } // Type of kart
+        public KartType KartType { get; set; } // Type of kart
 
         [Required]
         public bool Availability { get; set; } // Availability status

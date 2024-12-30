@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.DTOs
 {
@@ -9,7 +10,7 @@ namespace KartingSystemSimulation.DTOs
 
         [Required(ErrorMessage = "Kart Type is required.")]
         [StringLength(20, ErrorMessage = "Kart Type cannot be longer than 20 characters.")]
-        public string KartType { get; set; } // Kart type (Kids, Adults, Couples, Private)
+        public KartType KartType { get; set; } // Kart type (Kids, Adults, Couples, Private)
 
         [Required(ErrorMessage = "Availability status is required.")]
         public bool Availability { get; set; } // Availability status

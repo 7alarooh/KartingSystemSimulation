@@ -27,20 +27,14 @@ namespace KartingSystemSimulation.Services
         /// <param name="kartInput">DTO containing kart details.</param>
         public void AddKart(KartInputDTO kartInput)
         {
-            // Validate and map the KartType from string to enum.
-            if (!Enum.TryParse<KartType>(kartInput.KartType, true, out var kartType))
-            {
-                throw new ArgumentException($"Invalid KartType: {kartInput.KartType}");
-            }
-
-            // Map input DTO to Kart model.
+            // KartInputDTO.KartType is already an enum, so no need to parse from string.
             var kart = new Kart
             {
-                KartType = kartType, // Use the parsed enum value.
-                Availability = kartInput.Availability // Set whether the kart is available.
+                KartId = kartInput.KartId,
+                KartType = kartInput.KartType,
+                Availability = kartInput.Availability
             };
 
-            // Call the repository to save the new kart.
             _kartRepository.AddKart(kart);
         }
 
@@ -52,18 +46,16 @@ namespace KartingSystemSimulation.Services
         /// <exception cref="KeyNotFoundException">Thrown if the kart is not found.</exception>
         public KartOutputDTO GetKartById(int id)
         {
-            // Fetch kart details from the repository.
             var kart = _kartRepository.GetKartById(id);
             if (kart == null)
             {
-                throw new KeyNotFoundException("Kart not found."); // Handle missing kart.
+                throw new KeyNotFoundException("Kart not found.");
             }
 
-            // Map the Kart model to the output DTO.
             return new KartOutputDTO
             {
                 KartId = kart.KartId,
-                KartType = kart.KartType.ToString(), // Convert the KartType enum to a string.
+                KartType = kart.KartType, // Assign enum directly.
                 Availability = kart.Availability
             };
         }
@@ -74,13 +66,12 @@ namespace KartingSystemSimulation.Services
         /// <returns>A list of kart details as output DTOs.</returns>
         public IEnumerable<KartOutputDTO> GetAllKarts()
         {
-            // Fetch all karts from the repository.
             var karts = _kartRepository.GetAllKarts();
 
             return karts.Select(kart => new KartOutputDTO
             {
                 KartId = kart.KartId,
-                KartType = kart.KartType.ToString(), // Convert the KartType enum to a string.
+                KartType = kart.KartType, // Assign enum directly.
                 Availability = kart.Availability
             }).ToList();
         }
@@ -94,18 +85,17 @@ namespace KartingSystemSimulation.Services
         /// <exception cref="KeyNotFoundException">Thrown if the kart is not found.</exception>
         public void UpdateKart(int id, KartInputDTO kartInput)
         {
-            // Fetch the kart to be updated from the repository.
             var kart = _kartRepository.GetKartById(id);
             if (kart == null)
             {
                 throw new KeyNotFoundException("Kart not found.");
             }
 
-            // Update the kart details with the input data.
-            kart.KartType = Enum.Parse<KartType>(kartInput.KartType, true); // Convert the string to the corresponding enum value.
+            // Again, no need for Enum.Parse — the input is already an enum.
+            kart.KartId = kartInput.KartId;
+            kart.KartType = kartInput.KartType;
             kart.Availability = kartInput.Availability;
 
-            // Save the updated kart back to the repository.
             _kartRepository.UpdateKart(kart);
         }
 
