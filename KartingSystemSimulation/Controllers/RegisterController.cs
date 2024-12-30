@@ -49,5 +49,44 @@ namespace KartingSystemSimulation.Controllers
                 return StatusCode(500, new { ErrorCode = "UnknownError", ErrorMessage = ex.Message });
             }
         }
+
+        /// <summary>
+        /// Registers a new supervisor and adds to both Supervisor and User tables.
+        /// </summary>
+        /// <param name="supervisorDto">Supervisor input DTO</param>
+        /// <returns>ActionResult indicating success or failure</returns>
+        [HttpPost("supervisor")]
+        public IActionResult RegisterSupervisor([FromBody] SupervisorInputDTO supervisorDto)
+        {
+            try
+            {
+                // Validate the input
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                // Call the RegisterService to register the supervisor
+                _registerService.RegisterSupervisor(supervisorDto);
+
+                return CreatedAtAction(nameof(RegisterSupervisor), new { email = supervisorDto.Email }, supervisorDto);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new
+                {
+                    ErrorCode = "DuplicateEntry",
+                    ErrorMessage = ex.Message
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    ErrorCode = "UnknownError",
+                    ErrorMessage = ex.Message
+                });
+            }
+        }
     }
 }
