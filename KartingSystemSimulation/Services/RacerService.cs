@@ -1,4 +1,5 @@
-﻿using KartingSystemSimulation.Models;
+﻿using KartingSystemSimulation.DTOs;
+using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;
 using System;
 using System.Collections.Generic;
@@ -31,26 +32,36 @@ namespace KartingSystemSimulation.Services
             return _racerRepository.GetRacerById(racerId);
         }
 
-        public void AddRacer(Racer racer, int currentUserId)
+        public void AddRacer(RacerInputDTO racerDto, int currentUserId)
         {
             // Check if first name and last name are the same
-            if (racer.FirstName.Equals(racer.LastName, StringComparison.OrdinalIgnoreCase))
+            if (racerDto.FirstName.Equals(racerDto.LastName, StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException("First name and last name cannot be the same.");
             }
 
             // Check if age is at least 6 years old
             var today = DateTime.Today;
-            var age = today.Year - racer.DOB.Year;
-            if (racer.DOB.Date > today.AddYears(-age)) age--; // Adjust for birth date not yet reached in current year
+            var age = today.Year - racerDto.DOB.Year;
+            if (racerDto.DOB.Date > today.AddYears(-age)) age--; // Adjust for birth date not yet reached in current year
 
             if (age < 6)
             {
                 throw new InvalidOperationException("Racer must be at least 6 years old.");
             }
 
-            // Assign the current user ID as the creator
-            racer.SupervisorId = currentUserId;
+            // Map DTO to Racer entity
+            var racer = new Racer
+            {
+                FirstName = racerDto.FirstName,
+                LastName = racerDto.LastName,
+                Phone = racerDto.Phone,
+                CivilId = racerDto.CivilId,
+                Email = racerDto.Email,
+                DOB = racerDto.DOB,
+                //Membership = racerDto.Membership,
+                SupervisorId = currentUserId
+            };
 
             // Save the racer to the database
             _racerRepository.AddRacer(racer);

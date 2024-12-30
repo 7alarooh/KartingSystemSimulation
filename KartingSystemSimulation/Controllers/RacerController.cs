@@ -1,4 +1,5 @@
-﻿using KartingSystemSimulation.Models;
+﻿using KartingSystemSimulation.DTOs;
+using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,30 +34,27 @@ namespace KartingSystemSimulation.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddRacer([FromBody] Racer racer)
+        public IActionResult AddRacer([FromBody] RacerInputDTO racerDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             try
             {
-                // Extract the current user's ID from the JWT token
-                var currentUserId = int.Parse(HttpContext.User.FindFirst("userId")?.Value);
-
-                // Call the service method with the current user's ID
-                _racerService.AddRacer(racer, currentUserId);
-
-                return CreatedAtAction(nameof(GetRacerById), new { id = racer.RacerId }, racer);
+                // You can replace 1 with a dynamic value from the logged-in user
+                _racerService.AddRacer(racerDto, currentUserId: 1);
+                return Ok("Racer added successfully.");
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message); // Return validation errors
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}"); // Return unexpected errors
+                return BadRequest(ex.Message);
             }
         }
 
 
-        [HttpPut("{id}")]
+            [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] Racer racer)
         {
             if (id != racer.RacerId)
