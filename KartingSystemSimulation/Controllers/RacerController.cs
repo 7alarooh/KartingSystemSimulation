@@ -2,7 +2,7 @@
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+
 
 namespace KartingSystemSimulation.Controllers
 {
@@ -25,7 +25,7 @@ namespace KartingSystemSimulation.Controllers
             {
                 return BadRequest(ModelState); // Return validation errors
             }
-            Console.WriteLine(JsonConvert.SerializeObject(racerInput));
+            
 
             _racerService.AddRacer(racerInput);
             return Ok("Racer added successfully.");
