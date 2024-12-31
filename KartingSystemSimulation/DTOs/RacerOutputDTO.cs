@@ -1,21 +1,29 @@
-﻿namespace KartingSystemSimulation.DTOs
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
+
+namespace KartingSystemSimulation.DTOs
 {
     public class RacerOutputDTO
     {
-        public int RacerId { get; set; } // Primary key
+        [Required]
+        public int RacerId { get; set; } // Unique identifier for the racer
 
+        [Required]
         public string FirstName { get; set; } // Racer's first name
 
+        [Required]
         public string LastName { get; set; } // Racer's last name
 
-        public string Email { get; set; } // Validated email
+        [Required]
+        public string Email { get; set; } // Racer's email address
 
-        public DateTime DOB { get; set; } // Date of birth
+        [Required]
+        public DateTime DOB { get; set; } // Racer's date of birth
+        [Required]
+        public Gender Gender { get; set; } // Racer's gender
 
-        public string Gender { get; set; } // Gender
+        public Address Address { get; set; } // Racer's state of residence
 
-        public string Address { get; set; } // Address of residence
-
-        public string Membership { get; set; } // Membership type (Gold/Diamond/Normal)
+        public bool AgreedToRules { get; set; } // Indicates if the racer agreed to rules
     }
 }

@@ -1,48 +1,43 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.DTOs
 {
     public class RacerInputDTO
     {
-        
-
         [Required(ErrorMessage = "FirstName is required.")]
-        [StringLength(50, ErrorMessage = "First Name cannot be longer than 50 characters.")]
+        [StringLength(50, ErrorMessage = "FirstName cannot exceed 50 characters.")]
         public string FirstName { get; set; } // Racer's first name
 
         [Required(ErrorMessage = "LastName is required.")]
-        [StringLength(50, ErrorMessage = "Last Name cannot be longer than 50 characters.")]
+        [StringLength(50, ErrorMessage = "LastName cannot exceed 50 characters.")]
         public string LastName { get; set; } // Racer's last name
 
         [Required(ErrorMessage = "Phone is required.")]
-        [Phone(ErrorMessage = "Invalid phone number format.")]
-        public string Phone { get; set; } // Contact number
+        [Phone(ErrorMessage = "Invalid phone number.")]
+        public string Phone { get; set; } // Racer's contact number
 
         [Required(ErrorMessage = "CivilId is required.")]
-        [StringLength(20, MinimumLength = 8, ErrorMessage = "CivilId must be between 8 and 20 characters.")]
-        public string CivilId { get; set; } // Unique Civil ID
+        public string CivilId { get; set; } // Unique Civil ID for identification
 
         [Required(ErrorMessage = "Email is required.")]
-        [EmailAddress(ErrorMessage = "Invalid email format.")]
-        public string Email { get; set; } // Validated email
+        [EmailAddress(ErrorMessage = "Invalid email address.")]
+        public string Email { get; set; } // Racer's validated email address
 
-        [Required(ErrorMessage = "Date of Birth is required.")]
-        [DataType(DataType.Date)]
-        [Range(typeof(DateTime), "1/1/1900", "1/1/2005", ErrorMessage = "Date of Birth must be between 01/01/1900 and 01/01/2005.")]
-        public DateTime DOB { get; set; } // Date of birth
+        [Required(ErrorMessage = "DOB is required.")]
+        [DataType(DataType.Date, ErrorMessage = "Invalid date format.")]
+        public DateTime DOB { get; set; } // Racer's date of birth
 
         [Required(ErrorMessage = "Gender is required.")]
-        [StringLength(10, ErrorMessage = "Gender cannot be longer than 10 characters.")]
-        [RegularExpression(@"^(Male|Female|Other)$", ErrorMessage = "Gender must be either Male, Female, or Other.")]
-        public string Gender { get; set; } // Gender
+        [RegularExpression("(Male|Female)", ErrorMessage = "Gender must be 'Male' or 'Female'.")]
+        public Gender Gender { get; set; } // Racer's gender
 
         [Required(ErrorMessage = "State is required.")]
-        [StringLength(50, ErrorMessage = "State cannot be longer than 50 characters.")]
-        public string Address { get; set; } // Address of residence
+        public Address Address { get; set; } // Racer's state of residence
 
-        [Required(ErrorMessage = "Membership is required.")]
-        [StringLength(10, ErrorMessage = "Membership cannot be longer than 10 characters.")]
-        [RegularExpression(@"^(Gold|Diamond|Normal)$", ErrorMessage = "Membership must be either Gold, Diamond, or Normal.")]
-        public string Membership { get; set; } // Membership type (Gold/Diamond/Normal)
+        [Required(ErrorMessage = "AgreedToRules is required.")]
+        public bool AgreedToRules { get; set; } // Indicates agreement to privacy and rules
+
+        public int? SupervisorId { get; set; } // Optional supervisor ID for underage racers
     }
 }
