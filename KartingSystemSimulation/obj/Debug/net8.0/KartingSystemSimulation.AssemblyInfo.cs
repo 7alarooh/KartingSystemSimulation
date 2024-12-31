@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KartingSystemSimulation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+368523b3e2075d11186a29924882d74ad03e8b55")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+20600bb95578d79255b6684451fc009cfa54f059")]
 [assembly: System.Reflection.AssemblyProductAttribute("KartingSystemSimulation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KartingSystemSimulation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

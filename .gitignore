@@ -1,0 +1,10 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/KartingSystemSimulation/config
+/.vs/KartingSystemSimulation/FileContentIndex
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.dll
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.exe
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.pdb
+*.dll
