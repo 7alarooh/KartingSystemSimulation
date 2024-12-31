@@ -13,6 +13,9 @@ namespace KartingSystemSimulation.Models
         
         public Game Game { get; set; } // Navigation Property
         public ICollection<Racer> Racers { get; set; } // Navigation Property for multiple racers
+        public DateTime RaceDate { get; set; } // Timestamp for when the live update occurs
+
+        public string UpdateDetails { get; set; } // Details about the live race update (e.g., racer position changes, lap times)
     }
 }
 

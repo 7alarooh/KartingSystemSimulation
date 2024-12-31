@@ -1,4 +1,5 @@
 ﻿using KartingSystemSimulation.DTOs;
+using KartingSystemSimulation.Models;
 
 namespace KartingSystemSimulation.Services
 {
@@ -9,5 +10,8 @@ namespace KartingSystemSimulation.Services
         IEnumerable<UserOutputDTO> GetAll();
         UserOutputDTO GetById(int userId);
         void Update(int userId, UserInputDTO userDto);
+
+        // Added for testing only
+        User TestAddUser(UserInputDTO userInputDTO);
     }
 }

@@ -21,5 +21,9 @@ namespace KartingSystemSimulation.DTOs
 
         [Required(ErrorMessage = "KartId is required.")]
         public int KartId { get; set; } // Associated kart
+
+        // Added properties
+        public List<int> TopRacers { get; set; } // List of top racers' IDs
+        public string LiveRaceUpdates { get; set; } // Live updates as a string (you may choose a more appropriate structure)
     }
 }

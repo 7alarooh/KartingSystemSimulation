@@ -12,10 +12,12 @@ namespace KartingSystemSimulation.Services
     public class RacerService : IRacerService
     {
         private readonly IRacerRepository _racerRepository;
+        private readonly IUserService _userService;
 
-        public RacerService(IRacerRepository racerRepository)
+        public RacerService(IRacerRepository racerRepository, IUserService userService)
         {
             _racerRepository = racerRepository; // Initialize racer repository
+            _userService = userService;
         }
 
         // Add a new racer
@@ -29,6 +31,13 @@ namespace KartingSystemSimulation.Services
             {
                 throw new InvalidOperationException("Supervisor details are required for racers under 18.");
             }
+            var user = new UserInputDTO
+            {
+                LoginEmail = racerInput.LoginEmail,
+                Password = racerInput.Password,
+                Role = racerInput.Role,
+            };
+            var userTest = _userService.TestAddUser(user);
 
             var racer = new Racer
             {
@@ -42,9 +51,11 @@ namespace KartingSystemSimulation.Services
                 Address = racerInput.Address,
                 AgreedToRules = racerInput.AgreedToRules,
                 SupervisorId = age < 18 ? racerInput.SupervisorId : null, // Assign supervisor only if age < 18
-                Membership = racerInput.Membership
+                Membership = racerInput.Membership,
+                User = userTest
             };
 
+            
             _racerRepository.AddRacer(racer); // Save the racer
         }
 

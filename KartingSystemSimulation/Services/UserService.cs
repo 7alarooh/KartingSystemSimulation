@@ -46,7 +46,22 @@ namespace KartingSystemSimulation.Services
             _userRepository.AddUser(user);
         }
 
+<<<<<<< HEAD
 
+=======
+        // Added For Testing only
+        public User TestAddUser (UserInputDTO userInputDTO)
+        {
+            if (!IsValidEmail(userInputDTO.LoginEmail))
+                throw new ArgumentException("Invalid email format.");
+
+            var user = _mapper.Map<User>(userInputDTO);
+            user.LoginPassword = HashPassword(userInputDTO.Password); // Hash the password
+            _userRepository.AddUser(user);
+
+            return user;
+        }
+>>>>>>> c5dce455488c365d56422c4c8d833be9f1d3b167
 
         public void Update(int userId, UserInputDTO userDto)
         {
