@@ -25,10 +25,16 @@ namespace KartingSystemSimulation.Controllers
             {
                 return BadRequest(ModelState); // Return validation errors
             }
-            
 
-            _racerService.AddRacer(racerInput);
-            return Ok("Racer added successfully.");
+            try
+            {
+                _racerService.AddRacer(racerInput);
+                return Ok("Racer added successfully.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Handle supervisor validation error
+            }
         }
 
         // Get racer by ID

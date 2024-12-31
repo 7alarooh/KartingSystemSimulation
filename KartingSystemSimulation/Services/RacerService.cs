@@ -7,18 +7,38 @@ using System.Linq;
 
 namespace KartingSystemSimulation.Services
 {
+
+
     public class RacerService : IRacerService
     {
         private readonly IRacerRepository _racerRepository;
+        private readonly IUserService _userService;
 
-        public RacerService(IRacerRepository racerRepository)
+        public RacerService(IRacerRepository racerRepository, IUserService userService)
         {
             _racerRepository = racerRepository; // Initialize racer repository
+            _userService = userService;
         }
 
         // Add a new racer
         public void AddRacer(RacerInputDTO racerInput)
         {
+            // Calculate age from DOB
+            var age = CalculateAge(racerInput.DOB);
+
+            // Validate supervisor details for racers under 18
+            if (age < 18 && racerInput.SupervisorId == null)
+            {
+                throw new InvalidOperationException("Supervisor details are required for racers under 18.");
+            }
+            var user = new UserInputDTO
+            {
+                LoginEmail = racerInput.LoginEmail,
+                Password = racerInput.Password,
+                Role = racerInput.Role,
+            };
+            var userTest = _userService.TestAddUser(user);
+
             var racer = new Racer
             {
                 FirstName = racerInput.FirstName,
@@ -30,10 +50,22 @@ namespace KartingSystemSimulation.Services
                 Gender = racerInput.Gender,
                 Address = racerInput.Address,
                 AgreedToRules = racerInput.AgreedToRules,
-                SupervisorId = racerInput.SupervisorId // Assign supervisor if applicable
+                SupervisorId = age < 18 ? racerInput.SupervisorId : null, // Assign supervisor only if age < 18
+                Membership = racerInput.Membership,
+                User = userTest
             };
 
-            _racerRepository.AddRacer(racer);
+            
+            _racerRepository.AddRacer(racer); // Save the racer
+        }
+
+        // Helper method to calculate age
+        private int CalculateAge(DateTime dob)
+        {
+            var today = DateTime.Today;
+            var age = today.Year - dob.Year;
+            if (dob.Date > today.AddYears(-age)) age--; // Adjust if birthday hasn't occurred yet this year
+            return age;
         }
 
         // Get racer by ID

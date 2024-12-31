@@ -20,8 +20,8 @@ namespace KartingSystemSimulation.Models
         public Gender Gender { get; set; } // Changed from string to Enum
         public Address Address { get; set; }
         public bool AgreedToRules { get; set; }
-        public byte[] Picture { get; set; } // BLOB
-        public string Membership { get; set; } // ENUM: GOLD/DIAMOND/NORMAL
+        public byte[]? Picture { get; set; } // BLOB
+        public Membership Membership { get; set; } // ENUM: GOLD/DIAMOND/NORMAL
         public int? AssignedKartId { get; set; } // Foreign Key to Kart
         public int? SupervisorId { get; set; }
         public int? LiveRaceId { get; set; } // Foreign Key to LiveRace
