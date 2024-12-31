@@ -25,5 +25,7 @@ namespace KartingSystemSimulation.DTOs
         public Address Address { get; set; } // Racer's state of residence
 
         public bool AgreedToRules { get; set; } // Indicates if the racer agreed to rules
+
+        public Membership Membership {  get; set; } // Racer's Membership type
     }
 }

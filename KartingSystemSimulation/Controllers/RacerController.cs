@@ -2,7 +2,7 @@
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+
 
 namespace KartingSystemSimulation.Controllers
 {
@@ -25,10 +25,16 @@ namespace KartingSystemSimulation.Controllers
             {
                 return BadRequest(ModelState); // Return validation errors
             }
-            Console.WriteLine(JsonConvert.SerializeObject(racerInput));
 
-            _racerService.AddRacer(racerInput);
-            return Ok("Racer added successfully.");
+            try
+            {
+                _racerService.AddRacer(racerInput);
+                return Ok("Racer added successfully.");
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message); // Handle supervisor validation error
+            }
         }
 
         // Get racer by ID
