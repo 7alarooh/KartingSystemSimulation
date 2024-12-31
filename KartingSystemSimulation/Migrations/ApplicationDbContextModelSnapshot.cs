@@ -59,10 +59,15 @@ namespace KartingSystemSimulation.Migrations
                     b.Property<byte[]>("Picture")
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<string>("UserLoginEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("AdminId");
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("UserLoginEmail");
 
                     b.ToTable("Admins");
                 });
@@ -321,6 +326,9 @@ namespace KartingSystemSimulation.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserLoginEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("RacerId");
 
                     b.HasIndex("AssignedKartId");
@@ -331,6 +339,8 @@ namespace KartingSystemSimulation.Migrations
                     b.HasIndex("LiveRaceId");
 
                     b.HasIndex("SupervisorId");
+
+                    b.HasIndex("UserLoginEmail");
 
                     b.ToTable("Racers");
                 });
@@ -359,10 +369,15 @@ namespace KartingSystemSimulation.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserLoginEmail")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("SupervisorId");
 
                     b.HasIndex("Email")
                         .IsUnique();
+
+                    b.HasIndex("UserLoginEmail");
 
                     b.ToTable("Supervisors");
                 });
@@ -406,6 +421,10 @@ namespace KartingSystemSimulation.Migrations
                         .HasForeignKey("KartingSystemSimulation.Models.Admin", "Email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("KartingSystemSimulation.Models.User", null)
+                        .WithMany("Admins")
+                        .HasForeignKey("UserLoginEmail");
 
                     b.Navigation("User");
                 });
@@ -532,6 +551,10 @@ namespace KartingSystemSimulation.Migrations
                         .WithMany("SupervisedRacers")
                         .HasForeignKey("SupervisorId");
 
+                    b.HasOne("KartingSystemSimulation.Models.User", null)
+                        .WithMany("Racers")
+                        .HasForeignKey("UserLoginEmail");
+
                     b.Navigation("AssignedKart");
 
                     b.Navigation("LiveRace");
@@ -548,6 +571,10 @@ namespace KartingSystemSimulation.Migrations
                         .HasForeignKey("KartingSystemSimulation.Models.Supervisor", "Email")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("KartingSystemSimulation.Models.User", null)
+                        .WithMany("Supervisors")
+                        .HasForeignKey("UserLoginEmail");
 
                     b.Navigation("User");
                 });
@@ -599,6 +626,15 @@ namespace KartingSystemSimulation.Migrations
             modelBuilder.Entity("KartingSystemSimulation.Models.Supervisor", b =>
                 {
                     b.Navigation("SupervisedRacers");
+                });
+
+            modelBuilder.Entity("KartingSystemSimulation.Models.User", b =>
+                {
+                    b.Navigation("Admins");
+
+                    b.Navigation("Racers");
+
+                    b.Navigation("Supervisors");
                 });
 #pragma warning restore 612, 618
         }
