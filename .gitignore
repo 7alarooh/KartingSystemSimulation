@@ -1,0 +1,24 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.vsidx
+*.config
+*.json
+/.vs/Project/v17
+*.sqlite
+/KartingSystemSimulation/Migrations
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.AssemblyInfoInputs.cache
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.assets.cache
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.csproj.AssemblyReference.cache
+*.BuildWithSkipAnalyzers
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.AssemblyInfo.cs
+*.cs
+/KartingSystemSimulation/obj/Release/net8.0/KartingSystemSimulation.AssemblyInfoInputs.cache
+/KartingSystemSimulation/obj/Release/net8.0/KartingSystemSimulation.assets.cache
+/KartingSystemSimulation/obj/Release/net8.0/KartingSystemSimulation.GeneratedMSBuildEditorConfig.editorconfig
+/KartingSystemSimulation/obj/Release/net8.0/KartingSystemSimulation.csproj.AssemblyReference.cache
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.assets.cache
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.csproj.AssemblyReference.cache
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.GeneratedMSBuildEditorConfig.editorconfig
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.AssemblyInfoInputs.cache
