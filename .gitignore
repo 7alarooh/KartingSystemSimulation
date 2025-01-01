@@ -48,3 +48,6 @@
 /.vs/ProjectEvaluation/kartingsystemsimulation.projects.v9.bin
 /.vs/ProjectEvaluation/kartingsystemsimulation.strings.v9.bin
 /.vs/KartingSystemSimulation/v17/.suo
+/.vs/KartingSystemSimulation/v17/DocumentLayout.backup.json
+/KartingSystemSimulation/Migrations/20241229103748_UpdateEnums.cs
+/KartingSystemSimulation/Migrations/20241229103748_UpdateEnums.Designer.cs
