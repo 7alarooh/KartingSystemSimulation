@@ -27,16 +27,48 @@ namespace KartingSystemSimulation.Services
         /// <param name="kartInput">DTO containing kart details.</param>
         public void AddKart(KartInputDTO kartInput)
         {
-            // KartInputDTO.KartType is already an enum, so no need to parse from string.
+            // Validate that kartInput is not null
+            if (kartInput == null)
+            {
+                throw new ArgumentNullException(nameof(kartInput), "Kart input cannot be null.");
+            }
+
+            // Check if the KartType is valid (no parsing required since it's already an enum)
+            if (!Enum.IsDefined(typeof(KartType), kartInput.KartType))
+            {
+                throw new ArgumentException("Invalid kart type specified.", nameof(kartInput.KartType));
+            }
+
+            // Check for unique KartId to prevent duplicates
+            var existingKart = _kartRepository.GetKartById(kartInput.KartId);
+            if (existingKart != null)
+            {
+                throw new InvalidOperationException($"Kart with ID {kartInput.KartId} already exists.");
+            }
+
+            // Map input DTO to a new Kart object
             var kart = new Kart
             {
                 KartId = kartInput.KartId,
-                KartType = kartInput.KartType,
+                KartType = kartInput.KartType, // Directly assign the KartType enum
                 Availability = kartInput.Availability
             };
 
-            _kartRepository.AddKart(kart);
+            try
+            {
+                // Add the kart to the repository and persist in the database
+                _kartRepository.AddKart(kart);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("An error occurred while adding the kart.", ex);
+            }
         }
+
+
+
+
+
 
         /// <summary>
         /// Retrieves details of a kart by its ID.
