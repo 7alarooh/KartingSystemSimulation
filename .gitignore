@@ -29,3 +29,17 @@
 /.vs/KartingSystemSimulation/v17/.futdcache.v2
 /.vs/KartingSystemSimulation/v17/.suo
 /.vs/KartingSystemSimulation/v17/DocumentLayout.json
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.dll
+*.bin
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.pdb
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.exe
+*.json
+*.vsidx
+*.sqlite
+*.wsuo
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.dll
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.exe
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.pdb
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.exe
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.pdb
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.dll

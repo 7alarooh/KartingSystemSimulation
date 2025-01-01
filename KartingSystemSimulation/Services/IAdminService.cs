@@ -4,7 +4,7 @@ namespace KartingSystemSimulation.Services
 {
     public interface IAdminService
     {
-        void Add(AdminInputDTO adminInput);
+        void AddAdmin(AdminInputDTO adminDto);
         void Delete(int adminId);
         IEnumerable<AdminOutputDTO> GetAll();
         AdminOutputDTO GetById(int adminId);

@@ -4,6 +4,7 @@
     {
         Kids,
         Adults,
-        Training
+        Training,
+        Unknown
     }
 }
