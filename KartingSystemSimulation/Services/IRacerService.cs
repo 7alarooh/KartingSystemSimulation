@@ -9,5 +9,6 @@ namespace KartingSystemSimulation.Services
         IEnumerable<RacerOutputDTO> GetAllRacers();
         RacerOutputDTO GetRacerById(int id);
         void UpdateRacer(int id, RacerInputDTO racerInput);
+        int CalculateAge(DateTime dob);
     }
 }

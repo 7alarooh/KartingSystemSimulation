@@ -46,6 +46,8 @@ namespace KartingSystemSimulation
            // AutoMapper configuration
            builder.Services.AddAutoMapper(typeof(Program));
 
+            builder.Services.AddHttpClient();
+
             // Add controllers
             builder.Services.AddControllers();
 

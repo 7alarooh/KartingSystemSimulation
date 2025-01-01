@@ -35,7 +35,7 @@ namespace KartingSystemSimulation.Services
             {
                 LoginEmail = racerInput.LoginEmail,
                 Password = racerInput.Password,
-                Role = racerInput.Role,
+                
             };
             var userTest = _userService.TestAddUser(user);
 
@@ -60,7 +60,7 @@ namespace KartingSystemSimulation.Services
         }
 
         // Helper method to calculate age
-        private int CalculateAge(DateTime dob)
+        public int CalculateAge(DateTime dob)
         {
             var today = DateTime.Today;
             var age = today.Year - dob.Year;

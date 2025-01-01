@@ -15,10 +15,12 @@ namespace KartingSystemSimulation.Repositories
 
         public Supervisor GetSupervisorById(int supervisorId) => _context.Supervisors.Find(supervisorId); // Retrieves a specific Supervisor entity by its ID
 
-        public void AddSupervisor(Supervisor supervisor) // Adds a new Supervisor entity to the database
+        public int AddSupervisor(Supervisor supervisor) // Adds a new Supervisor entity to the database
         {
             _context.Supervisors.Add(supervisor); // Adds the supervisor to the context
             _context.SaveChanges(); // Saves changes to the database
+
+            return supervisor.SupervisorId;
         }
 
         public void UpdateSupervisor(Supervisor supervisor) // Updates an existing Supervisor entity in the database

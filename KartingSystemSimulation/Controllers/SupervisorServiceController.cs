@@ -113,5 +113,21 @@ namespace KartingSystemSimulation.Controllers
                 return BadRequest(new { ErrorCode = ErrorCode.OperationNotAllowed.ToString(), ErrorMessage = ex.Message });
             }
         }
+
+        //----------------------------------------------
+        [HttpPost("AddSupervisor")]
+        public IActionResult AddSupervisor([FromBody] SupervisorInputDTO supervisorInput) 
+        { 
+            try
+            {
+                var supervisorId = _supervisorService.AddSupervisor(supervisorInput);
+                return Ok(supervisorId);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
