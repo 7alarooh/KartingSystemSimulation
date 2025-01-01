@@ -1,0 +1,26 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+*.cs
+*.cache
+*.editorconfig
+/KartingSystemSimulation/obj/KartingSystemSimulation.csproj.nuget.dgspec.json
+/KartingSystemSimulation/obj/KartingSystemSimulation.csproj.nuget.g.props
+/KartingSystemSimulation/obj/Debug/net8.0/refint/KartingSystemSimulation.dll
+/KartingSystemSimulation/obj/Debug/net8.0/apphost.exe
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.AssemblyInfo.cs
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.AssemblyInfoInputs.cache
+/KartingSystemSimulation/obj/Debug/net8.0/ref/KartingSystemSimulation.dll
+/KartingSystemSimulation/obj/project.nuget.cache
+/KartingSystemSimulation/obj/project.assets.json
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.sourcelink.json
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.pdb
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.genruntimeconfig.cache
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.GeneratedMSBuildEditorConfig.editorconfig
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.dll
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.csproj.FileListAbsolute.txt
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.csproj.CoreCompileInputs.cache
+*.BuildWithSkipAnalyzers
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.csproj.AssemblyReference.cache
+/KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.assets.cache

@@ -309,15 +309,13 @@ namespace KartingSystemSimulation.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Membership")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Picture")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<int?>("SupervisorId")
