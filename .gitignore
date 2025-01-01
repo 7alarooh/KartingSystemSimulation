@@ -2,6 +2,7 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
+<<<<<<< HEAD
 *.vsidx
 *.config
 *.json
@@ -22,3 +23,19 @@
 /KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.csproj.AssemblyReference.cache
 /KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.GeneratedMSBuildEditorConfig.editorconfig
 /KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.AssemblyInfoInputs.cache
+=======
+/.vs/KartingSystemSimulation/config
+/.vs/KartingSystemSimulation/FileContentIndex
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.dll
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.exe
+/KartingSystemSimulation/bin/Debug/net8.0/KartingSystemSimulation.pdb
+*.dll
+>>>>>>> 6e3dccda4dc9e02984446a72cd10bc08f3577830
+/KartingSystemSimulation/Migrations/20241229103748_UpdateEnums.cs
+/KartingSystemSimulation/Migrations/20241229103748_UpdateEnums.Designer.cs
+/KartingSystemSimulation/Migrations/20241230071904_updateToRelatedBetweenUsers.cs
+/KartingSystemSimulation/Migrations/20241230071904_updateToRelatedBetweenUsers.Designer.cs
+/KartingSystemSimulation/Migrations/20241230130058_updateA.Designer.cs
+/KartingSystemSimulation/Migrations/20241230130058_updateA.cs
+/KartingSystemSimulation/Migrations/ApplicationDbContextModelSnapshot.cs
+/KartingSystemSimulation/obj/Debug/net8.0/ref/KartingSystemSimulation.dll

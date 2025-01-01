@@ -33,18 +33,22 @@ namespace KartingSystemSimulation.Services
             return _mapper.Map<UserOutputDTO>(user);
         }
 
-        public void Add(UserInputDTO userDto)
+        public void AddUser(UserInputDTO userDto)
         {
             if (!IsValidEmail(userDto.LoginEmail))
                 throw new ArgumentException("Invalid email format.");
 
+            if (!IsValidPassword(userDto.Password))
+                throw new ArgumentException("Password must be at least 8 characters.");
+
             var user = _mapper.Map<User>(userDto);
-            user.LoginPassword = HashPassword(userDto.Password); // Hash the password
+            user.LoginPassword = HashPassword(userDto.Password); // Hash password before saving
             _userRepository.AddUser(user);
         }
 
+
         // Added For Testing only
-        public User TestAddUser (UserInputDTO userInputDTO)
+        public User TestAddUser(UserInputDTO userInputDTO)
         {
             if (!IsValidEmail(userInputDTO.LoginEmail))
                 throw new ArgumentException("Invalid email format.");
