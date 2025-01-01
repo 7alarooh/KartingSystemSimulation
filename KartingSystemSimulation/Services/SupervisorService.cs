@@ -60,7 +60,7 @@ namespace KartingSystemSimulation.Services
         /// </summary>
         /// <param name="supervisor">The supervisor entity to add.</param>
         /// <exception cref="ArgumentException">Thrown if input validation fails.</exception>
-        public int AddSupervisor(SupervisorInputDTO supervisorInput)
+        public Supervisor AddSupervisor(SupervisorInputDTO supervisorInput)
         {
             // Input validation for supervisor entity
             if (string.IsNullOrWhiteSpace(supervisorInput.Name))
@@ -73,9 +73,9 @@ namespace KartingSystemSimulation.Services
                 throw new ArgumentException("Invalid phone number.");
 
             // Call repository to add the supervisor
-            int supervisorId = _supervisorRepository.AddSupervisor(_mapper.Map<Supervisor>(supervisorInput));
+            var supervisor = _supervisorRepository.AddSupervisor(_mapper.Map<Supervisor>(supervisorInput));
 
-            return supervisorId;
+            return supervisor;
         }
 
         /// <summary>

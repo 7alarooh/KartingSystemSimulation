@@ -12,13 +12,10 @@ namespace KartingSystemSimulation.Controllers
     public class RacerController : ControllerBase
     {
         private readonly IRacerService _racerService;
-        private readonly HttpClient _httpClient;
-        private readonly string _supervisorApiBaseUrl = "https://localhost:7087/api/supervisor";
 
-        public RacerController(IRacerService racerService, HttpClient httpClient)
+        public RacerController(IRacerService racerService)
         {
             _racerService = racerService; // Initialize racer service
-            _httpClient = httpClient;
         }
 
         // Add a new racer
@@ -28,21 +25,6 @@ namespace KartingSystemSimulation.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState); // Return validation errors.
-            }
-            var age = _racerService.CalculateAge(racerInput.DOB);
-
-            if (age < 18)
-            {
-                var response = await _httpClient.PostAsJsonAsync(_supervisorApiBaseUrl, racerInput.SupervisorId);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    return BadRequest("Failed to add supervisor. Please check the details.");
-                }
-
-                // Get the created supervisor ID
-                var supervisorId = await response.Content.ReadAsStringAsync();
-                racerInput.SupervisorId = int.Parse(supervisorId); // Assign the supervisor ID to the racer
             }
 
             try

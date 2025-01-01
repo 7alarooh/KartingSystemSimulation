@@ -13,11 +13,13 @@ namespace KartingSystemSimulation.Services
     {
         private readonly IRacerRepository _racerRepository;
         private readonly IUserService _userService;
+        private readonly ISupervisorService _SupervisorService;
 
-        public RacerService(IRacerRepository racerRepository, IUserService userService)
+        public RacerService(IRacerRepository racerRepository, IUserService userService, ISupervisorService supervisorService)
         {
             _racerRepository = racerRepository; // Initialize racer repository
             _userService = userService;
+            _SupervisorService = supervisorService;
         }
 
         // Add a new racer
@@ -25,11 +27,21 @@ namespace KartingSystemSimulation.Services
         {
             // Calculate age from DOB
             var age = CalculateAge(racerInput.DOB);
-
-            // Validate supervisor details for racers under 18
-            if (age < 18 && racerInput.SupervisorId == null)
+            Supervisor supervisor = new Supervisor 
             {
-                throw new InvalidOperationException("Supervisor details are required for racers under 18.");
+                SupervisorId = 0
+            };
+            // Validate supervisor details for racers under 18
+            if (age < 18)
+            {
+                var racerSupervisor = new SupervisorInputDTO
+                {
+                    Name = racerInput.supervisor.Name,
+                    Email = racerInput.supervisor.Email,
+                    CivilId = racerInput.supervisor.CivilId,
+                    Phone = racerInput.supervisor.Phone,
+                };
+                supervisor = _SupervisorService.AddSupervisor(racerSupervisor);
             }
             var user = new UserInputDTO
             {
@@ -50,8 +62,9 @@ namespace KartingSystemSimulation.Services
                 Gender = racerInput.Gender,
                 Address = racerInput.Address,
                 AgreedToRules = racerInput.AgreedToRules,
-                SupervisorId = age < 18 ? racerInput.SupervisorId : null, // Assign supervisor only if age < 18
+                SupervisorId = age < 18 ? supervisor.SupervisorId : null, // Assign supervisor only if age < 18
                 Membership = racerInput.Membership,
+                Supervisor = age < 18 ? supervisor : null,
                 User = userTest
             };
 

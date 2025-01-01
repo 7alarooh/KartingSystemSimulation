@@ -58,5 +58,7 @@ namespace KartingSystemSimulation.DTOs
         [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters long.")]
         public string Password { get; set; } // Plain password input
 
+
+        public RacerSupervisorDTO? supervisor { get; set; }
     }
 }
