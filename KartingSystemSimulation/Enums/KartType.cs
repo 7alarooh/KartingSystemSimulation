@@ -2,10 +2,9 @@
 {
     public enum KartType
     {
-
-
         Kids,
         Adults,
-        Couples
+        Couples,
+        Private
     }
 }
