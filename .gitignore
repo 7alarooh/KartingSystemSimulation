@@ -24,3 +24,8 @@
 *.BuildWithSkipAnalyzers
 /KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.csproj.AssemblyReference.cache
 /KartingSystemSimulation/obj/Debug/net8.0/KartingSystemSimulation.assets.cache
+/.vs/KartingSystemSimulation/FileContentIndex
+*.config
+/.vs/KartingSystemSimulation/v17/.futdcache.v2
+/.vs/KartingSystemSimulation/v17/.suo
+/.vs/KartingSystemSimulation/v17/DocumentLayout.json
