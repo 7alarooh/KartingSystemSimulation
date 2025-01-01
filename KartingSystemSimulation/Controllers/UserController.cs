@@ -61,7 +61,7 @@ namespace KartingSystemSimulation.Controllers
 
             try
             {
-                _userService.Add(userDto);
+                _userService.TestAddUser(userDto);
                 return CreatedAtAction(nameof(GetUserById), new { id = userDto.LoginEmail }, new { message = "User added successfully." });
             }
             catch (ArgumentException ex)
