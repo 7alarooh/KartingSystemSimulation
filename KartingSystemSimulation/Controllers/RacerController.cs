@@ -27,7 +27,7 @@ namespace KartingSystemSimulation.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Return validation errors
+                return BadRequest(ModelState); // Return validation errors.
             }
             var age = _racerService.CalculateAge(racerInput.DOB);
 
