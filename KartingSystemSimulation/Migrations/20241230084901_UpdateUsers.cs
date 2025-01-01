@@ -5,7 +5,7 @@
 namespace KartingSystemSimulation.Migrations
 {
     /// <inheritdoc />
-    public partial class updateToRelatedBetweenUsers : Migration
+    public partial class UpdateUsers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
