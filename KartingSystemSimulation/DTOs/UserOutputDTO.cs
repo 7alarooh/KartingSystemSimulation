@@ -4,6 +4,6 @@
     {
         public string LoginEmail { get; set; }
         public string Role { get; set; }
-        // Add additional properties you want to expose in output
+        public string Token { get; set; } // Include JWT token
     }
 }

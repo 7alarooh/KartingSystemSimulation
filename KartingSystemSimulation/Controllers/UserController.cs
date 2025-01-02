@@ -1,19 +1,29 @@
 ﻿using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace KartingSystemSimulation.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService)
+        private readonly IConfiguration _configuration;
+
+        public UserController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService; // Inject UserService
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -126,5 +136,51 @@ namespace KartingSystemSimulation.Controllers
                 return Unauthorized(new { ErrorCode = ErrorCode.OperationNotAllowed.ToString(), ErrorMessage = ex.Message });
             }
         }
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginDTO loginDto)
+        {
+            try
+            {
+                var user = _userService.AuthenticateUser(loginDto.Email, loginDto.Password);
+                return Ok(user);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return Unauthorized(new { ErrorMessage = ex.Message });
+            }
+        }
+
+        [NonAction]
+        public string GenerateJwtToken(string userId, string username, string role, string email, string permissions)
+        {
+            var jwtSettings = _configuration.GetSection("JwtSettings");
+            var secretKey = jwtSettings["SecretKey"];
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new ArgumentNullException("JWT secret key is not configured.");
+            }
+
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, userId),
+        new Claim(JwtRegisteredClaimNames.UniqueName, username),
+        new Claim(ClaimTypes.Role, role),
+        new Claim(JwtRegisteredClaimNames.Email, email),
+        new Claim("Permissions", permissions) // Add permissions as a custom claim
+    };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpiryInMinutes"])),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
     }
 }
