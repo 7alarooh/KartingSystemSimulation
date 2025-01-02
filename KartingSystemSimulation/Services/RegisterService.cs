@@ -20,47 +20,54 @@ namespace KartingSystemSimulation.Services
             using var transaction = _context.Database.BeginTransaction(); // Start transaction
             try
             {
-                // Validate email
+                // Step 1: Validate email format
                 if (!IsValidEmail(adminDto.Email))
                 {
                     throw new ArgumentException("Invalid email format.");
                 }
-                // Check if the email exists in the Users table
+
+                // Step 2: Check if email already exists in the Users table
                 var existingUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.LoginEmail == adminDto.Email);
                 if (existingUser != null)
                 {
                     throw new InvalidOperationException("User with the same email already exists.");
                 }
-                // Hash the password
+
+                // Step 3: Hash the default password
                 var hashedPassword = HashPassword("DefaultPassword123");
-                // Add the user to the Users table
+
+                // Step 4: Add the user to the Users table
                 var user = new User
                 {
-                    LoginEmail = adminDto.Email,
-                    LoginPassword = hashedPassword,
-                    Role = Role.Admin
+                    LoginEmail = adminDto.Email, // Use the admin's email as the login email
+                    LoginPassword = hashedPassword, // Save hashed password
+                    Role = Role.Admin // Assign the Admin role
                 };
                 _userRepository.AddUser(user);
-                // Map and add the admin to the Admins table
+
+                // Step 5: Map and add the admin to the Admins table
                 var admin = new Admin
                 {
                     FirstName = adminDto.FirstName,
                     LastName = adminDto.LastName,
                     Phone = adminDto.Phone,
                     CivilId = adminDto.CivilId,
-                    Email = adminDto.Email,
+                    Email = user.LoginEmail,
                     Gender = adminDto.Gender,
-                    Address = adminDto.Address
+                    Address = adminDto.Address,
                 };
                 _adminRepository.AddAdmin(admin);
-                transaction.Commit(); // Commit the transaction
+
+                // Step 6: Commit the transaction to save both records
+                transaction.Commit();
             }
             catch (Exception ex)
             {
-                transaction.Rollback(); // Rollback transaction on error
+                transaction.Rollback(); // Rollback on error to maintain atomicity
                 throw new InvalidOperationException("Error during admin registration.", ex);
             }
         }
+
         public void RegisterSupervisor(SupervisorInputDTO supervisorDto)
         {
             using var transaction = _context.Database.BeginTransaction(); // Begin a transaction to ensure atomicity.

@@ -49,9 +49,9 @@ namespace KartingSystemSimulation.DTOs
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string LoginEmail { get; set; }
 
-        //[Required(ErrorMessage = "Role is required.")]
-        //[RegularExpression("^(Admin|Racer|Supervisor)$", ErrorMessage = "Role must be one of the following: Admin, Racer, Supervisor.")]
-        //public string Role { get; set; }
+        [Required(ErrorMessage = "Role is required.")]
+        [RegularExpression("^(Admin|Racer|Supervisor)$", ErrorMessage = "Role must be one of the following: Admin, Racer, Supervisor.")]
+        public string Role { get; set; }
 
 
         [Required(ErrorMessage = "Password is required.")]
