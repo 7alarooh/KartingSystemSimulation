@@ -7,7 +7,7 @@ namespace KartingSystemSimulation.Models
     {
         [Key]
         public int BookingId { get; set; } // Primary Key
-        public int? RacerId { get; set; } // Foreign Key to Racer
+        public int RacerId { get; set; } // Foreign Key to Racer
         public int RaceId { get; set; } // Foreign Key to Game
         [Required]
         public BookingType BookingType { get; set; } // Free or Paid

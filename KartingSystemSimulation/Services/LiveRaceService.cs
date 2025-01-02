@@ -5,7 +5,7 @@ using KartingSystemSimulation.Repositories;
 
 namespace KartingSystemSimulation.Services
 {
-    public class LiveRaceService : ILiveRaceService
+    public class LiveRaceService :  ILiveRaceService
     {
         private readonly ILiveRaceRepository _liveRaceRepository;
         private readonly IGameRepository _gameRepository;
