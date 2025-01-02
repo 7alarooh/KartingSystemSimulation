@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KartingSystemSimulation.DTOs
 {
     public class GameOutputDTO
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required]
         public int GameId { get; set; } // Unique identifier for the game
 
@@ -14,7 +16,7 @@ namespace KartingSystemSimulation.DTOs
         public string RaceType { get; set; } // Type of the race
 
         [Required]
-        [Range(1, 50)]
+        [Range(10, 15)]
         public int Laps { get; set; } // Total number of laps in the race
 
         [Required]

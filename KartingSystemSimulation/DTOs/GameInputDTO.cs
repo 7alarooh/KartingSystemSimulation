@@ -11,7 +11,7 @@ namespace KartingSystemSimulation.DTOs
         public string RaceType { get; set; } // Type of the race (e.g., Kids, Adults, Training)
 
         [Required(ErrorMessage = "Laps is required.")]
-        [Range(1, 50, ErrorMessage = "Laps must be between 1 and 50.")]
+        [Range(10, 15, ErrorMessage = "Laps must be between 1 and 50.")]
         public int Laps { get; set; } // Number of laps in the race
 
         [Required(ErrorMessage = "RaceDate is required.")]
