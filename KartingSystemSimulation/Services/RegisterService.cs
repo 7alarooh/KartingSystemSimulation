@@ -2,6 +2,7 @@
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;
+
 namespace KartingSystemSimulation.Services
 {
     public class RegisterService : IRegisterService
@@ -9,86 +10,97 @@ namespace KartingSystemSimulation.Services
         private readonly IAdminRepository _adminRepository;
         private readonly IUserRepository _userRepository;
         private readonly ApplicationDbContext _context;
-        public RegisterService(IAdminRepository adminRepository, IUserRepository userRepository, ApplicationDbContext context)
+        private readonly IEmailService _emailService;
+
+        public RegisterService(IAdminRepository adminRepository, IUserRepository userRepository, ApplicationDbContext context, IEmailService emailService)
         {
             _adminRepository = adminRepository;
             _userRepository = userRepository;
             _context = context;
+            _emailService = emailService;
         }
         public void RegisterAdmin(AdminInputDTO adminDto)
         {
-            using var transaction = _context.Database.BeginTransaction(); // Start transaction
+            using var transaction = _context.Database.BeginTransaction();            // Begin transaction
             try
             {
-                // Step 1: Validate email format
+                // Step 1: Validate email
                 if (!IsValidEmail(adminDto.Email))
                 {
                     throw new ArgumentException("Invalid email format.");
                 }
 
-                // Step 2: Check if email already exists in the Users table
-                var existingUser = _userRepository.GetAllUsers().FirstOrDefault(u => u.LoginEmail == adminDto.Email);
-                if (existingUser != null)
+                // Step 2: Check for duplicates
+                if (_userRepository.GetAllUsers().Any(u => u.LoginEmail == adminDto.Email))
                 {
-                    throw new InvalidOperationException("User with the same email already exists.");
+                    throw new InvalidOperationException("User with this email already exists.");
                 }
 
-                // Step 3: Hash the default password
+                // Step 3: Hash password and save user
                 var hashedPassword = HashPassword("DefaultPassword123");
-
-                // Step 4: Add the user to the Users table
                 var user = new User
                 {
-                    LoginEmail = adminDto.Email, // Use the admin's email as the login email
-                    LoginPassword = hashedPassword, // Save hashed password
-                    Role = Role.Admin // Assign the Admin role
+                    LoginEmail = adminDto.Email,
+                    LoginPassword = hashedPassword,
+                    Role = Role.Admin
                 };
                 _userRepository.AddUser(user);
 
-                // Step 5: Map and add the admin to the Admins table
+                // Step 4: Save admin
                 var admin = new Admin
                 {
                     FirstName = adminDto.FirstName,
                     LastName = adminDto.LastName,
                     Phone = adminDto.Phone,
                     CivilId = adminDto.CivilId,
-                    Email = user.LoginEmail,
+                    Email = adminDto.Email,
                     Gender = adminDto.Gender,
-                    Address = adminDto.Address,
+                    Address = adminDto.Address
                 };
                 _adminRepository.AddAdmin(admin);
 
-                // Step 6: Commit the transaction to save both records
-                transaction.Commit();
+                _context.SaveChanges(); // Save all changes
+                transaction.Commit(); // Commit transaction
+
+                // Step 5: Send email
+                string subject = "Welcome to Karting System - Admin Registration";
+                string body = $@"
+            <h3>Dear {admin.FirstName} {admin.LastName},</h3>
+            <p>You have been successfully registered as an Admin in Karting System.</p>
+            <ul>
+                <li>Email: {admin.Email}</li>
+                <li>Password: DefaultPassword123</li>
+            </ul>
+            <p><strong>Note:</strong> Please change your password after your first login.</p>";
+                _emailService.SendEmailAsync(admin.Email, subject, body).Wait();
             }
             catch (Exception ex)
             {
-                transaction.Rollback(); // Rollback on error to maintain atomicity
+                transaction.Rollback();
                 throw new InvalidOperationException("Error during admin registration.", ex);
             }
         }
 
+
+
         public void RegisterSupervisor(SupervisorInputDTO supervisorDto)
         {
-            using var transaction = _context.Database.BeginTransaction(); // Begin a transaction to ensure atomicity.
+            using var transaction = _context.Database.BeginTransaction(); // Begin transaction
             try
             {
-                // Validate email format
+                // Validate input
                 if (!IsValidEmail(supervisorDto.Email))
-                    throw new ArgumentException("Invalid email format.", nameof(supervisorDto.Email));
+                {
+                    throw new ArgumentException("Invalid email format.");
+                }
 
-                // Ensure the Civil ID is unique
                 if (_context.Supervisors.Any(s => s.CivilId == supervisorDto.CivilId))
-                    throw new InvalidOperationException("A supervisor with the same Civil ID already exists.");
+                {
+                    throw new InvalidOperationException("Supervisor with this Civil ID already exists.");
+                }
 
-                // Ensure the Phone number is unique
-                if (_context.Supervisors.Any(s => s.Phone == supervisorDto.Phone))
-                    throw new InvalidOperationException("A supervisor with the same Phone number already exists.");
-
-                // Hash the password
+                // Save supervisor
                 var hashedPassword = HashPassword("DefaultPassword123");
-
-                // Add the supervisor to the Supervisors table
                 var supervisor = new Supervisor
                 {
                     Name = supervisorDto.Name,
@@ -98,25 +110,37 @@ namespace KartingSystemSimulation.Services
                 };
                 _context.Supervisors.Add(supervisor);
 
-                // Add the user to the Users table
+                // Save user
                 var user = new User
                 {
                     LoginEmail = supervisorDto.Email,
-                    Role = Role.Supervisor, // Set the role as Supervisor
-                    LoginPassword = hashedPassword // Store the hashed password
+                    LoginPassword = hashedPassword,
+                    Role = Role.Supervisor
                 };
                 _context.Users.Add(user);
 
-                // Save changes and commit the transaction
                 _context.SaveChanges();
                 transaction.Commit();
-            }
-            catch (Exception ex)
-            {
-                transaction.Rollback(); // Rollback the transaction if an error occurs
-                throw new InvalidOperationException("Failed to register supervisor. See inner exception for details.", ex);
-            }
+
+                // Send email
+                string subject = "Welcome to Karting System - Supervisor Registration";
+                string body = $@"
+            <h3>Dear {supervisor.Name},</h3>
+            <p>You have been successfully registered as a Supervisor in Karting System.</p>
+            <ul>
+                <li>Email: {supervisor.Email}</li>
+                <li>Password: DefaultPassword123</li>
+            </ul>
+            <p><strong>Note:</strong> Please change your password after your first login.</p>";
+                _emailService.SendEmailAsync(supervisor.Email, subject, body).Wait();
+    }
+    catch (Exception ex)
+    {
+        transaction.Rollback();
+        throw new InvalidOperationException("Error registering supervisor.", ex);
+    }
         }
+
 
 
         private string HashPassword(string password)

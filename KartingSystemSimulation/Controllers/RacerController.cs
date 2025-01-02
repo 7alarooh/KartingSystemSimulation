@@ -13,9 +13,11 @@ namespace KartingSystemSimulation.Controllers
     {
         private readonly IRacerService _racerService;
 
-        public RacerController(IRacerService racerService)
+        private readonly IEmailService _emailService;
+        public RacerController(IRacerService racerService, IEmailService emailService)
         {
             _racerService = racerService; // Initialize racer service
+            _emailService = emailService;
         }
 
         // Add a new racer
@@ -29,14 +31,20 @@ namespace KartingSystemSimulation.Controllers
 
             try
             {
+                // Call the service to add the racer
                 _racerService.AddRacer(racerInput);
-                return Ok("Racer added successfully.");
+                return Ok("Racer added successfully and notification email sent."); // Success response
             }
             catch (InvalidOperationException ex)
             {
-                return BadRequest(ex.Message); // Handle supervisor validation error
+                return Conflict(new { ErrorCode = "DuplicateEntry", ErrorMessage = ex.Message }); // Conflict error
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { ErrorCode = "InternalServerError", ErrorMessage = ex.Message }); // Generic server error
             }
         }
+
 
         // Get racer by ID
         [HttpGet("{id}")]

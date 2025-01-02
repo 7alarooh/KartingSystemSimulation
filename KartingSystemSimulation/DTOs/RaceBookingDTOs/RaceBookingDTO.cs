@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using KartingSystemSimulation.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.DTOs
 {
@@ -19,6 +20,7 @@ namespace KartingSystemSimulation.DTOs
         [StringLength(10, ErrorMessage = "Booking Type cannot be longer than 10 characters.")]
         [RegularExpression(@"^(Free|Paid)$", ErrorMessage = "Booking Type must be either Free or Paid.")]
         public string BookingType { get; set; } // Booking type (Free, Paid)
+        public BookingType BookingType { get; set; } // Booking type (Free, Paid)
 
         [Required(ErrorMessage = "AmountPaid is required.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "AmountPaid must be greater than 0.")]

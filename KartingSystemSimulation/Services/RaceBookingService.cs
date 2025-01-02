@@ -51,7 +51,7 @@ namespace KartingSystemSimulation.Services
             return new RaceBookingDTO
             {
                 BookingId = booking.BookingId,
-                RacerId = booking.RacerId,
+                //RacerId = booking.RacerId,
                 RaceId = booking.RaceId,
                 BookingType = booking.BookingType.ToString(),
                 AmountPaid = booking.AmountPaid,
@@ -68,7 +68,7 @@ namespace KartingSystemSimulation.Services
             return bookings.Select(b => new RaceBookingDTO
             {
                 BookingId = b.BookingId,
-                RacerId = b.RacerId,
+               // RacerId = b.RacerId,
                 RaceId = b.RaceId,
                 BookingType = b.BookingType.ToString(),
                 AmountPaid = b.AmountPaid,
@@ -86,7 +86,7 @@ namespace KartingSystemSimulation.Services
             return new RaceBookingDTO
             {
                 BookingId = booking.BookingId,
-                RacerId = booking.RacerId,
+               // RacerId = booking.RacerId,
                 RaceId = booking.RaceId,
                 BookingType = booking.BookingType.ToString(),
                 AmountPaid = booking.AmountPaid,

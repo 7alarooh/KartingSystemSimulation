@@ -13,10 +13,12 @@ namespace KartingSystemSimulation.Controllers
         private readonly IRegisterService _registerService;
         private readonly IMapper _mapper;
 
-        public RegisterController(IRegisterService registerService, IMapper mapper)
+        private readonly IEmailService _emailService;
+        public RegisterController(IRegisterService registerService, IMapper mapper, IEmailService emailService)
         {
             _registerService = registerService;
             _mapper = mapper;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -27,28 +29,27 @@ namespace KartingSystemSimulation.Controllers
         [HttpPost("admin")]
         public IActionResult RegisterAdmin([FromBody] AdminInputDTO adminDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState); // Return validation errors.
+            }
+
             try
             {
-                // Validate the input
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-
-                // Call the RegisterService to register the admin using the DTO directly
+                // Call the service to register the admin
                 _registerService.RegisterAdmin(adminDto);
-
-                return CreatedAtAction(nameof(RegisterAdmin), new { email = adminDto.Email }, adminDto);
+                return CreatedAtAction(nameof(RegisterAdmin), new { email = adminDto.Email }, adminDto); // Success response
             }
             catch (InvalidOperationException ex)
             {
-                return Conflict(new { ErrorCode = "DuplicateEntry", ErrorMessage = ex.Message });
+                return Conflict(new { ErrorCode = "DuplicateEntry", ErrorMessage = ex.Message }); // Conflict error
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { ErrorCode = "UnknownError", ErrorMessage = ex.Message });
+                return StatusCode(500, new { ErrorCode = "InternalServerError", ErrorMessage = ex.Message }); // Generic server error
             }
         }
+
 
         /// <summary>
         /// Registers a new supervisor and adds to both Supervisor and User tables.
@@ -56,7 +57,7 @@ namespace KartingSystemSimulation.Controllers
         /// <param name="supervisorDto">Supervisor input DTO</param>
         /// <returns>ActionResult indicating success or failure</returns>
         [HttpPost("supervisor")]
-        public IActionResult RegisterSupervisor([FromBody] SupervisorInputDTO supervisorDto)
+        public IActionResult RegisterSupervisor([FromBody] SupervisorInputDTO supervisorDto, IEmailService emailService)
         {
             try
             {
