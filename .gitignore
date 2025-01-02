@@ -123,3 +123,4 @@ FodyWeavers.xsd
 /KartingSystemSimulation/Migrations/20241231063123_stup3.Designer.cs
 /KartingSystemSimulation/Migrations/20241231064458_setup4.cs
 /.vs/KartingSystemSimulation/DesignTimeBuild/.dtbcache.v2
+/KartingSystemSimulation/KartingSystemSimulation.csproj.user
