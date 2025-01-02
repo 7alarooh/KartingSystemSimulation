@@ -48,8 +48,9 @@ namespace KartingSystemSimulation
             builder.Services.AddScoped<IGameService, GameService>();
             builder.Services.AddScoped<IRaceBookingService, RaceBookingService>();
             builder.Services.AddScoped<ILiveRaceService, LiveRaceService>();
-           // AutoMapper configuration
-           builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddScoped<IEmailService, EmailService>();
+            // AutoMapper configuration
+            builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
             // AutoMapper configuration
