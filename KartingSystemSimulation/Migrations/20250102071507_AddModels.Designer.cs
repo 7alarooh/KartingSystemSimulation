@@ -4,6 +4,7 @@ using KartingSystemSimulation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KartingSystemSimulation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250102071507_AddModels")]
+    partial class AddModels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -206,41 +209,6 @@ namespace KartingSystemSimulation.Migrations
                     b.ToTable("LiveRaceRacers");
                 });
 
-            modelBuilder.Entity("KartingSystemSimulation.Models.Membership", b =>
-                {
-                    b.Property<int>("MembershipId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MembershipId"));
-
-                    b.Property<decimal>("DiscountPercentage")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FreeTickets")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MembershipType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RacerId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("MembershipId");
-
-                    b.HasIndex("RacerId")
-                        .IsUnique();
-
-                    b.ToTable("Memberships");
-                });
-
             modelBuilder.Entity("KartingSystemSimulation.Models.RaceBooking", b =>
                 {
                     b.Property<int>("BookingId")
@@ -370,6 +338,9 @@ namespace KartingSystemSimulation.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LiveRaceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Membership")
                         .HasColumnType("int");
 
                     b.Property<string>("Phone")
@@ -540,15 +511,6 @@ namespace KartingSystemSimulation.Migrations
                     b.Navigation("Racer");
                 });
 
-            modelBuilder.Entity("KartingSystemSimulation.Models.Membership", b =>
-                {
-                    b.HasOne("KartingSystemSimulation.Models.Racer", null)
-                        .WithOne("Membership")
-                        .HasForeignKey("KartingSystemSimulation.Models.Membership", "RacerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("KartingSystemSimulation.Models.RaceBooking", b =>
                 {
                     b.HasOne("KartingSystemSimulation.Models.Game", "Game")
@@ -706,9 +668,6 @@ namespace KartingSystemSimulation.Migrations
 
             modelBuilder.Entity("KartingSystemSimulation.Models.Racer", b =>
                 {
-                    b.Navigation("Membership")
-                        .IsRequired();
-
                     b.Navigation("RaceHistories");
                 });
 

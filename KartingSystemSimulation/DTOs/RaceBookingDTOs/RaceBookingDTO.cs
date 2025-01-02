@@ -19,6 +19,7 @@ namespace KartingSystemSimulation.DTOs
         [Required(ErrorMessage = "BookingType is required.")]
         [StringLength(10, ErrorMessage = "Booking Type cannot be longer than 10 characters.")]
         [RegularExpression(@"^(Free|Paid)$", ErrorMessage = "Booking Type must be either Free or Paid.")]
+        public string BookingType { get; set; } // Booking type (Free, Paid)
         public BookingType BookingType { get; set; } // Booking type (Free, Paid)
 
         [Required(ErrorMessage = "AmountPaid is required.")]

@@ -1,4 +1,5 @@
 ﻿using KartingSystemSimulation.Enums;
+using KartingSystemSimulation.Models;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 

@@ -1,4 +1,5 @@
 ﻿using KartingSystemSimulation.Enums;
+using KartingSystemSimulation.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace KartingSystemSimulation.DTOs
