@@ -1,34 +1,51 @@
 ﻿using KartingSystemSimulation.Models;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KartingSystemSimulation.Repositories
 {
     public class LiveRaceRepository : ILiveRaceRepository
     {
-        private readonly ApplicationDbContext _context;// Database context for accessing the database
+        private readonly ApplicationDbContext _context;
 
-
-        public LiveRaceRepository(ApplicationDbContext context)// Constructor to initialize the repository with the database context
+        public LiveRaceRepository(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public IEnumerable<LiveRace> GetAllLiveRaces() => _context.LiveRaces.ToList();
-        public LiveRace GetLiveRaceById(int raceId) => _context.LiveRaces.Find(raceId);
-        public void AddLiveRaces(LiveRace liveRace)
+        public IEnumerable<LiveRace> GetAllLiveRaces()
+    => _context.LiveRaces.Include(lr => lr.LiveRaceRacers).ThenInclude(lrr => lrr.Racer).ToList() ?? new List<LiveRace>();
+
+
+        public LiveRace GetLiveRaceById(int liveRaceId) => _context.LiveRaces.Find(liveRaceId);
+
+        public LiveRace GetByIdWithRacers(int liveRaceId)
         {
-            _context.LiveRaces.Add(liveRace);// Adds a new LiveRace entity to the database
+            return _context.LiveRaces
+                .Include(lr => lr.LiveRaceRacers)
+                .ThenInclude(lrr => lrr.Racer)
+                .FirstOrDefault(lr => lr.LiveRaceId == liveRaceId);
+        }
+
+        public void AddLiveRace(LiveRace liveRace)
+        {
+            _context.LiveRaces.Add(liveRace);
             _context.SaveChanges();
         }
-        public void UpdateLiveRace(LiveRace liveRace)// Updates an existing LiveRace entity in the database
+
+        public void UpdateLiveRace(LiveRace liveRace)
         {
             _context.LiveRaces.Update(liveRace);
             _context.SaveChanges();
         }
-        public void DeleteLiveRace(LiveRace liveRace)// Deletes a LiveRace entity from the database
+
+        public void DeleteLiveRace(LiveRace liveRace)
         {
             _context.LiveRaces.Remove(liveRace);
             _context.SaveChanges();
         }
     }
+
 
 }

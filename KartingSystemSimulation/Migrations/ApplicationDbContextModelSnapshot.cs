@@ -157,20 +157,11 @@ namespace KartingSystemSimulation.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LiveRaceId"));
 
-                    b.Property<int>("CurrentLap")
-                        .HasColumnType("int");
-
                     b.Property<int>("GameId")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("LapTime")
-                        .HasColumnType("time");
-
                     b.Property<DateTime>("RaceDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<TimeSpan>("TotalTime")
-                        .HasColumnType("time");
 
                     b.Property<string>("UpdateDetails")
                         .IsRequired()
@@ -181,6 +172,38 @@ namespace KartingSystemSimulation.Migrations
                     b.HasIndex("GameId");
 
                     b.ToTable("LiveRaces");
+                });
+
+            modelBuilder.Entity("KartingSystemSimulation.Models.LiveRaceRacer", b =>
+                {
+                    b.Property<int>("LiveRaceRacerId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LiveRaceRacerId"));
+
+                    b.Property<int>("CurrentLap")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("LapTime")
+                        .HasColumnType("time");
+
+                    b.Property<int>("LiveRaceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RacerId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("TotalTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("LiveRaceRacerId");
+
+                    b.HasIndex("LiveRaceId");
+
+                    b.HasIndex("RacerId");
+
+                    b.ToTable("LiveRaceRacers");
                 });
 
             modelBuilder.Entity("KartingSystemSimulation.Models.RaceBooking", b =>
@@ -466,6 +489,25 @@ namespace KartingSystemSimulation.Migrations
                     b.Navigation("Game");
                 });
 
+            modelBuilder.Entity("KartingSystemSimulation.Models.LiveRaceRacer", b =>
+                {
+                    b.HasOne("KartingSystemSimulation.Models.LiveRace", "LiveRace")
+                        .WithMany("LiveRaceRacers")
+                        .HasForeignKey("LiveRaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("KartingSystemSimulation.Models.Racer", "Racer")
+                        .WithMany()
+                        .HasForeignKey("RacerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LiveRace");
+
+                    b.Navigation("Racer");
+                });
+
             modelBuilder.Entity("KartingSystemSimulation.Models.RaceBooking", b =>
                 {
                     b.HasOne("KartingSystemSimulation.Models.Game", "Game")
@@ -547,9 +589,8 @@ namespace KartingSystemSimulation.Migrations
                         .IsRequired();
 
                     b.HasOne("KartingSystemSimulation.Models.LiveRace", "LiveRace")
-                        .WithMany("Racers")
-                        .HasForeignKey("LiveRaceId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithMany()
+                        .HasForeignKey("LiveRaceId");
 
                     b.HasOne("KartingSystemSimulation.Models.Supervisor", "Supervisor")
                         .WithMany("SupervisedRacers")
@@ -614,7 +655,7 @@ namespace KartingSystemSimulation.Migrations
 
             modelBuilder.Entity("KartingSystemSimulation.Models.LiveRace", b =>
                 {
-                    b.Navigation("Racers");
+                    b.Navigation("LiveRaceRacers");
                 });
 
             modelBuilder.Entity("KartingSystemSimulation.Models.RaceHistory", b =>

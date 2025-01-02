@@ -18,6 +18,7 @@ namespace KartingSystemSimulation
         public DbSet<RaceHistory> RaceHistories { get; set; }
         public DbSet<Leaderboard> Leaderboards { get; set; }
         public DbSet<LiveRace> LiveRaces { get; set; }
+        public DbSet<LiveRaceRacer> LiveRaceRacers { get; set; }
         public DbSet<RaceRacer> RaceRacers { get; set; }
         public DbSet<RaceHistoryLeaderboard> RaceHistoryLeaderboards { get; set; }
 
@@ -78,12 +79,17 @@ namespace KartingSystemSimulation
                 .HasForeignKey(lr => lr.GameId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // LiveRace to Racer Relation (One-to-Many)
+            // Configure LiveRace and LiveRaceRacer relationships
             modelBuilder.Entity<LiveRace>()
-                .HasMany(lr => lr.Racers)
-                .WithOne(r => r.LiveRace)
-                .HasForeignKey(r => r.LiveRaceId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasMany(lr => lr.LiveRaceRacers) // Use LiveRaceRacers instead of Racers
+                .WithOne(lrr => lrr.LiveRace)
+                .HasForeignKey(lrr => lrr.LiveRaceId);
+
+            // Configure LiveRaceRacer and Racer relationships
+            modelBuilder.Entity<LiveRaceRacer>()
+                .HasOne(lrr => lrr.Racer)
+                .WithMany()
+                .HasForeignKey(lrr => lrr.RacerId);
 
             // Racer and RaceHistory Relation
             modelBuilder.Entity<RaceHistory>()
