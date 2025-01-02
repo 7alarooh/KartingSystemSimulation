@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KartingSystemSimulation.DTOs
 {
     public class GameDTO
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Required(ErrorMessage = "GameId is required.")]
         public int GameId { get; set; } // Primary key
 
@@ -12,7 +14,7 @@ namespace KartingSystemSimulation.DTOs
         public string RaceType { get; set; } // Race type (e.g., Kids, Adults, Training)
 
         [Required(ErrorMessage = "Number of laps is required.")]
-        [Range(1, 100, ErrorMessage = "Laps must be between 1 and 100.")]
+        [Range(10, 15, ErrorMessage = "Laps must be between 1 and 100.")]
         public int Laps { get; set; } // Number of laps
 
         [Required(ErrorMessage = "Race Date is required.")]
