@@ -1,6 +1,6 @@
 ﻿namespace KartingSystemSimulation.Enums
 {
-    public enum Membership
+    public enum MembershipType
     {
         Normal,
         Gold,
