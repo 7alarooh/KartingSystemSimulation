@@ -14,7 +14,9 @@ namespace KartingSystemSimulation.Repositories
             _context = context;
         }
 
-        public IEnumerable<LiveRace> GetAllLiveRaces() => _context.LiveRaces.ToList();
+        public IEnumerable<LiveRace> GetAllLiveRaces()
+    => _context.LiveRaces.Include(lr => lr.LiveRaceRacers).ThenInclude(lrr => lrr.Racer).ToList() ?? new List<LiveRace>();
+
 
         public LiveRace GetLiveRaceById(int liveRaceId) => _context.LiveRaces.Find(liveRaceId);
 
