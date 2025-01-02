@@ -1,8 +1,14 @@
 ﻿using AutoMapper;
+using KartingSystemSimulation.Controllers;
 using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace KartingSystemSimulation.Services
 {
@@ -11,12 +17,14 @@ namespace KartingSystemSimulation.Services
         private readonly IUserRepository _userRepository;
         private readonly IAdminRepository _adminRepository;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _config;
 
-        public UserService(IUserRepository userRepository, IAdminRepository adminRepository, IMapper mapper)
+        public UserService(IUserRepository userRepository, IAdminRepository adminRepository, IMapper mapper, IConfiguration config)
         {
             _userRepository = userRepository;
             _adminRepository = adminRepository;
             _mapper = mapper;
+            _config = config;
         }
 
         public IEnumerable<UserOutputDTO> GetAll()
@@ -85,6 +93,73 @@ namespace KartingSystemSimulation.Services
 
             _userRepository.DeleteUser(user);
         }
+
+
+        public UserOutputDTO AuthenticateUser(string email, string password)
+        {
+            var user = _userRepository.GetUserByEmail(email);
+            if (user == null || !VerifyPassword(password, user.LoginPassword))
+            {
+                throw new UnauthorizedAccessException("Invalid credentials.");
+            }
+
+            var permissions = GetUserPermissions(user.Role); // Fetch permissions based on role or other criteria
+            var token = GenerateJwtToken(user.LoginEmail, user.Role.ToString(), permissions);
+
+            return new UserOutputDTO
+            {
+                LoginEmail = user.LoginEmail,
+                Role = user.Role.ToString(),
+                Token = token
+            };
+        }
+
+        private string GenerateJwtToken(string email, string role, string permissions)
+        {
+            var jwtSettings = _config.GetSection("JwtSettings");
+            var secretKey = jwtSettings["SecretKey"];
+            if (string.IsNullOrEmpty(secretKey))
+            {
+                throw new ArgumentNullException("JWT secret key is not configured.");
+            }
+
+            var claims = new List<Claim>
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, email),
+        new Claim(ClaimTypes.Role, role),
+        new Claim(JwtRegisteredClaimNames.Email, email),
+        new Claim("Permissions", permissions)
+    };
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpiryInMinutes"])),
+                signingCredentials: creds
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private bool VerifyPassword(string enteredPassword, string storedHashedPassword)
+        {
+            return HashPassword(enteredPassword) == storedHashedPassword;
+        }
+
+        private string GetUserPermissions(Role role)
+        {
+            return role switch
+            {
+                Role.Admin => "ManageUsers,EditConfig",
+                Role.Racer => "ParticipateRace,ViewLeaderboard",
+                Role.Supervisor => "ManageRacers,ApproveRaces",
+                _ => string.Empty
+            };
+        }
+
+
 
         // Helper methods for validation and hashing
         private bool IsValidEmail(string email)

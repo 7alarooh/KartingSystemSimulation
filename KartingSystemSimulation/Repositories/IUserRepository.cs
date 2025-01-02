@@ -7,6 +7,7 @@ namespace KartingSystemSimulation.Repositories
         void AddUser(User user);
         void DeleteUser(User user);
         IEnumerable<User> GetAllUsers();
+        User GetUserByEmail(string email);
         User GetUserById(int userId);
         void UpdateUser(User user);
     }

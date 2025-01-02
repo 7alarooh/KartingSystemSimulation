@@ -14,6 +14,10 @@ namespace KartingSystemSimulation.Repositories
         public IEnumerable<User> GetAllUsers() => _context.Users.ToList(); // Retrieves all User entities from the database
 
         public User GetUserById(int userId) => _context.Users.Find(userId); // Retrieves a specific User entity by its ID
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.FirstOrDefault(u => u.LoginEmail == email);//Make sure the GetUserByEmail method is implemented in the UserRepository.
+        }
 
         public void AddUser(User user) // Adds a new User entity to the database
         {

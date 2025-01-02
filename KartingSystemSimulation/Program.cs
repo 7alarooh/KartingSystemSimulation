@@ -13,7 +13,8 @@ namespace KartingSystemSimulation
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
+            // Add Authorization
+            builder.Services.AddAuthorization();
             // Add services to the container
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -49,6 +50,10 @@ namespace KartingSystemSimulation
             builder.Services.AddScoped<ILiveRaceService, LiveRaceService>();
            // AutoMapper configuration
            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+
+            // AutoMapper configuration
+            builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddHttpClient();
 
@@ -70,6 +75,28 @@ namespace KartingSystemSimulation
                         Email = "support@kartingsimulation.com"
                     }
                 });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme (Example: 'Bearer <token>')",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
             });
 
             var app = builder.Build();
@@ -87,6 +114,7 @@ namespace KartingSystemSimulation
          
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
