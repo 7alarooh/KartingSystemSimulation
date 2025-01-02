@@ -2,12 +2,17 @@
 
 namespace KartingSystemSimulation.Repositories
 {
+    using KartingSystemSimulation.Models;
+    using System.Collections.Generic;
+
     public interface ILiveRaceRepository
     {
-        void AddLiveRaces(LiveRace liveRace);
-        void DeleteLiveRace(LiveRace liveRace);
         IEnumerable<LiveRace> GetAllLiveRaces();
-        LiveRace GetLiveRaceById(int raceId);
+        LiveRace GetLiveRaceById(int liveRaceId);
+        void AddLiveRace(LiveRace liveRace);
         void UpdateLiveRace(LiveRace liveRace);
+        void DeleteLiveRace(LiveRace liveRace);
+        LiveRace GetByIdWithRacers(int liveRaceId); // Includes racers
     }
+
 }
