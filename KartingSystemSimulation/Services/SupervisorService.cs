@@ -1,4 +1,6 @@
-﻿using KartingSystemSimulation.Models;
+﻿using AutoMapper;
+using KartingSystemSimulation.DTOs;
+using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;
 
 namespace KartingSystemSimulation.Services
@@ -10,14 +12,16 @@ namespace KartingSystemSimulation.Services
     public class SupervisorService : ISupervisorService
     {
         private readonly ISupervisorRepository _supervisorRepository;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Constructor to inject the Supervisor repository dependency.
         /// </summary>
         /// <param name="supervisorRepository">Repository to handle data access for Supervisor entities.</param>
-        public SupervisorService(ISupervisorRepository supervisorRepository)
+        public SupervisorService(ISupervisorRepository supervisorRepository, IMapper mapper)
         {
             _supervisorRepository = supervisorRepository; // Inject the repository
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -56,20 +60,22 @@ namespace KartingSystemSimulation.Services
         /// </summary>
         /// <param name="supervisor">The supervisor entity to add.</param>
         /// <exception cref="ArgumentException">Thrown if input validation fails.</exception>
-        public void AddSupervisor(Supervisor supervisor)
+        public Supervisor AddSupervisor(SupervisorInputDTO supervisorInput)
         {
             // Input validation for supervisor entity
-            if (string.IsNullOrWhiteSpace(supervisor.Name))
+            if (string.IsNullOrWhiteSpace(supervisorInput.Name))
                 throw new ArgumentException("Supervisor name cannot be empty.");
 
-            if (string.IsNullOrWhiteSpace(supervisor.Email) || !IsValidEmail(supervisor.Email))
+            if (string.IsNullOrWhiteSpace(supervisorInput.Email) || !IsValidEmail(supervisorInput.Email))
                 throw new ArgumentException("Invalid email format.");
 
-            if (string.IsNullOrWhiteSpace(supervisor.Phone) || !IsValidPhone(supervisor.Phone))
+            if (string.IsNullOrWhiteSpace(supervisorInput.Phone) || !IsValidPhone(supervisorInput.Phone))
                 throw new ArgumentException("Invalid phone number.");
 
             // Call repository to add the supervisor
-            _supervisorRepository.AddSupervisor(supervisor);
+            var supervisor = _supervisorRepository.AddSupervisor(_mapper.Map<Supervisor>(supervisorInput));
+
+            return supervisor;
         }
 
         /// <summary>

@@ -13,7 +13,7 @@ namespace KartingSystemSimulation.Mapping
             CreateMap<User, UserOutputDTO>();
             CreateMap<UserInputDTO, User>();
             CreateMap<Supervisor, SupervisorOutputDTO>();
-            CreateMap<SupervisorOutputDTO, Supervisor>();
+            CreateMap<SupervisorInputDTO, Supervisor>();
             
 
         }

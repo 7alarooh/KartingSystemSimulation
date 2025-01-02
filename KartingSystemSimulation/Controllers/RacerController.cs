@@ -1,4 +1,5 @@
-﻿using KartingSystemSimulation.DTOs;
+﻿using Azure;
+using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,11 @@ namespace KartingSystemSimulation.Controllers
 
         // Add a new racer
         [HttpPost]
-        public IActionResult AddRacer([FromBody] RacerInputDTO racerInput)
+        public async Task<IActionResult> AddRacer([FromBody] RacerInputDTO racerInput)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Return validation errors
+                return BadRequest(ModelState); // Return validation errors.
             }
 
             try

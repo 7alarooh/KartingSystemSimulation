@@ -1,10 +1,11 @@
-﻿using KartingSystemSimulation.Models;
+﻿using KartingSystemSimulation.DTOs;
+using KartingSystemSimulation.Models;
 
 namespace KartingSystemSimulation.Services
 {
     public interface ISupervisorService
     {
-        void AddSupervisor(Supervisor supervisor);
+        Supervisor AddSupervisor(SupervisorInputDTO supervisor);
         void DeleteSupervisor(int supervisorId);
         IEnumerable<Supervisor> GetAllSupervisors();
         Supervisor GetSupervisorById(int supervisorId);
