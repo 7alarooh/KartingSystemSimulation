@@ -1,4 +1,4 @@
-﻿
+
 namespace KartingSystemSimulation.Services
 {
     public interface IEmailService

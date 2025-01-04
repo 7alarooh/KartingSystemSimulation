@@ -1,4 +1,4 @@
-﻿using KartingSystemSimulation.DTOs;
+﻿using KartingSystemSimulation.DTOs.GameDTOs;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;

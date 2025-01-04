@@ -1,4 +1,5 @@
-﻿using KartingSystemSimulation.Models;
+﻿using KartingSystemSimulation.Enums;
+using KartingSystemSimulation.Models;
 
 namespace KartingSystemSimulation.Repositories
 {
@@ -8,6 +9,7 @@ namespace KartingSystemSimulation.Repositories
         void DeleteLeaderboard(Leaderboard leaderboard);
         IEnumerable<Leaderboard> GetAllLeaderboards();
         Leaderboard GetLeaderboardById(int leaderboardId);
+        IEnumerable<Leaderboard> GetLeaderboardByPeriod(Period period);
         void UpdateLeaderboard(Leaderboard leaderboard);
     }
 }

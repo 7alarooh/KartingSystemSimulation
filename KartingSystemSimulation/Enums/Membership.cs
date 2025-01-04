@@ -2,8 +2,8 @@
 {
     public enum MembershipType
     {
-        Normal,
-        Gold,
-        Dimond
+        Normal = 0,
+        Gold = 1,
+        Dimond = 2
     }
 }
