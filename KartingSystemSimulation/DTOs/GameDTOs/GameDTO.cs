@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace KartingSystemSimulation.DTOs
+namespace KartingSystemSimulation.DTOs.GameDTOs
 {
     public class GameDTO
     {

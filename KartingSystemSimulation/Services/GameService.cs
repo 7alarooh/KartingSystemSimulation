@@ -1,4 +1,4 @@
-﻿using KartingSystemSimulation.DTOs;
+﻿using KartingSystemSimulation.DTOs.GameDTOs;
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;

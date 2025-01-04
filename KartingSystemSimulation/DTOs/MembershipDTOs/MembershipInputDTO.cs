@@ -9,7 +9,7 @@ namespace KartingSystemSimulation.DTOs.MembershipDTOs
         public int RacerId { get; set; } // ID of the racer for whom the membership is being created
 
         [Required(ErrorMessage = "MembershipType is required.")]
-        [EnumDataType(typeof(MembershipType), ErrorMessage = "Invalid Membership Type.")]
+        //[EnumDataType(typeof(MembershipType), ErrorMessage = "Invalid Membership Type.")]
         public MembershipType MembershipType { get; set; } // Membership type (Normal, Gold, Diamond)
 
         [Required(ErrorMessage = "StartDate is required.")]
