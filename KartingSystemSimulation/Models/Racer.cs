@@ -25,6 +25,13 @@ namespace KartingSystemSimulation.Models
         public byte[]? Picture { get; set; }
 
         // Configure one-to-one navigation
+        public Membership Membership { get; set; }
+
+        public int? AssignedKartId { get; set; }
+        public int? SupervisorId { get; set; }
+        public int? LiveRaceId { get; set; }
+        public int UserId { get; set; }
+        // Configure one-to-one navigation
         //
         public Membership Membership { get; set; }
 

@@ -26,11 +26,14 @@ namespace KartingSystemSimulation.Models
 
         [Required]
         public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; }
 
         public int FreeTickets { get; set; }
 
+        public int FreeTickets { get; set; }
         public decimal DiscountPercentage { get; set; }
 
+        public decimal DiscountPercentage { get; set; }
         public string description { get; set; }
     }
 }
