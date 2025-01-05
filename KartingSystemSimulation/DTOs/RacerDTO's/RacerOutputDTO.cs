@@ -2,7 +2,6 @@
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using System.ComponentModel.DataAnnotations;
-using KartingSystemSimulation.DTOs.MembershipDTOs;
 
 namespace KartingSystemSimulation.DTOs
 {
@@ -28,7 +27,7 @@ namespace KartingSystemSimulation.DTOs
         public Address Address { get; set; } // Racer's state of residence
 
         public bool AgreedToRules { get; set; } // Indicates if the racer agreed to rules
-                                                // Include membership details as MembershipOutputDTO
-        public MembershipOutputDTO Membership { get; set; }  // Racer's Membership type
+
+        public MembershipOutputDTO Membership {  get; set; } // Racer's Membership type  // Flattened Membership details
     }
 }

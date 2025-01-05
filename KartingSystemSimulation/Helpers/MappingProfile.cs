@@ -21,7 +21,8 @@ namespace KartingSystemSimulation.Mapping
             CreateMap<Racer, RacerOutputDTO>()
                 .ForMember(dest => dest.Membership, opt => opt.MapFrom(src => src.Membership));
             // Map Membership to MembershipOutputDTO
-            CreateMap<Membership, MembershipOutputDTO>();
+            CreateMap<Membership, MembershipOutputDTO>()
+                .ForMember(dest => dest.RacerName, opt => opt.MapFrom(src => src.Racer.FirstName + " " + src.Racer.LastName));
 
         }
     }

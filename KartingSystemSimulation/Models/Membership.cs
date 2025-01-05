@@ -1,6 +1,7 @@
 using KartingSystemSimulation.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace KartingSystemSimulation.Models
 {
@@ -24,8 +25,8 @@ namespace KartingSystemSimulation.Models
         public int FreeTickets { get; set; } // Free tickets provided with the membership
 
         public decimal DiscountPercentage { get; set; } // Discount percentage offered with the membership
-       
         [ForeignKey("RacerId")]
+        [JsonIgnore]
         public Racer Racer { get; set; } // Navigation property to Racer
     }
 }
