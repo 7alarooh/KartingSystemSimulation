@@ -12,12 +12,13 @@ namespace KartingSystemSimulation.Controllers
     public class RacerController : ControllerBase
     {
         private readonly IRacerService _racerService;
-
         private readonly IEmailService _emailService;
-        public RacerController(IRacerService racerService, IEmailService emailService)
+        private readonly IMembershipService _membershipService;
+        public RacerController(IRacerService racerService, IEmailService emailService, IMembershipService membershipService)
         {
             _racerService = racerService; // Initialize racer service
             _emailService = emailService;
+            _membershipService = membershipService;
         }
 
         // Add a new racer

@@ -2,9 +2,8 @@
 {
     public enum BookingType
     {
-        Private,
-        Group,
-        Kids
+        Free,
+        Paid
     }
 }
 

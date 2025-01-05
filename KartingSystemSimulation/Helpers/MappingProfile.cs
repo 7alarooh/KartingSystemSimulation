@@ -14,7 +14,8 @@ namespace KartingSystemSimulation.Mapping
             CreateMap<UserInputDTO, User>();
             CreateMap<Supervisor, SupervisorOutputDTO>();
             CreateMap<SupervisorInputDTO, Supervisor>();
-            
+            CreateMap<RaceHistory, RaceHistoryDTO>().ReverseMap();
+
 
         }
     }

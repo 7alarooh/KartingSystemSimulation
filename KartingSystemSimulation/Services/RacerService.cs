@@ -16,15 +16,18 @@ namespace KartingSystemSimulation.Services
         private readonly IUserService _userService;
         private readonly ISupervisorService _SupervisorService;
         private readonly ApplicationDbContext _context;
+        private readonly IMembershipService _membershipService;
 
         private readonly IEmailService _emailService;
 
-        public RacerService(IRacerRepository racerRepository, IUserService userService, ISupervisorService supervisorService, IEmailService EmailService)
+        public RacerService(IRacerRepository racerRepository, IUserService userService, ISupervisorService supervisorService, IEmailService EmailService, IMembershipService membershipService, ApplicationDbContext _context)
         {
             _racerRepository = racerRepository; // Initialize racer repository
             _userService = userService;
             _SupervisorService = supervisorService;
             _emailService = EmailService;
+            _membershipService = membershipService;
+            this._context = _context;
         }
 
         // Add a new racer

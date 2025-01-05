@@ -1,14 +1,18 @@
 ﻿using KartingSystemSimulation.Enums;
+using KartingSystemSimulation.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace KartingSystemSimulation.DTOs.MembershipDTOs
 {
     public class MembershipOutputDTO
     {
+       
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int MembershipId { get; set; } // Unique ID of the membership
 
         public int RacerId { get; set; } // ID of the associated racer
 
-        public string MembershipType { get; set; } // Membership type (Normal, Gold, Diamond)
+        public MembershipType MembershipType { get; set; } // Membership type (Normal, Gold, Diamond)
 
         public DateTime StartDate { get; set; } // Start date of the membership
 

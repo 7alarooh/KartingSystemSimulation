@@ -12,7 +12,7 @@ namespace KartingSystemSimulation.Models
         public int RacerId { get; set; } // Foreign key to Racer entity
 
         [Required]
-        public string MembershipType { get; set; } // Membership type (e.g., Normal, Gold, Diamond)
+        public MembershipType MembershipType { get; set; } // Membership type (e.g., Normal, Gold, Diamond)
 
         [Required]
         public DateTime StartDate { get; set; } // Start date of the membership
