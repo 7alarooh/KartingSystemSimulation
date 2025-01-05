@@ -34,7 +34,7 @@ namespace KartingSystemSimulation.Services
         // Add a new racer
         public void AddRacer(RacerInputDTO racerInput)
         {
-            using var transaction = _context.Database.BeginTransaction();            // Begin transaction
+            using var transaction = _context.Database.BeginTransaction();// Begin transaction
             try
             {
                 // Step 1: Calculate age
