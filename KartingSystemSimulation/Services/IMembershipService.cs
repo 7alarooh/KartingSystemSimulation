@@ -1,4 +1,4 @@
-﻿using KartingSystemSimulation.DTOs.MembershipDTOs;
+using KartingSystemSimulation.DTOs.MembershipDTOs;
 
 namespace KartingSystemSimulation.Services
 {

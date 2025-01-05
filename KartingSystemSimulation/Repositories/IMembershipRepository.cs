@@ -1,4 +1,4 @@
-﻿using KartingSystemSimulation.Models;
+using KartingSystemSimulation.Models;
 
 namespace KartingSystemSimulation.Repositories
 {
