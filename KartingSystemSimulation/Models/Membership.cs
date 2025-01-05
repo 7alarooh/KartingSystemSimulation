@@ -11,22 +11,25 @@ namespace KartingSystemSimulation.Models
         public int MembershipId { get; set; } // Primary Key
 
         [Required]
+        [ForeignKey(nameof(Racer))] // Map RacerId to Racer navigation
         public int RacerId { get; set; } // Foreign key to Racer entity
 
-        [Required]
-        public MembershipType MembershipType { get; set; } // Membership type (e.g., Normal, Gold, Diamond)
-
-        [Required]
-        public DateTime StartDate { get; set; } // Start date of the membership
-
-        [Required]
-        public DateTime EndDate { get; set; } // End date of the membership
-
-        public int FreeTickets { get; set; } // Free tickets provided with the membership
-
-        public decimal DiscountPercentage { get; set; } // Discount percentage offered with the membership
-        [ForeignKey("RacerId")]
         [JsonIgnore]
         public Racer Racer { get; set; } // Navigation property to Racer
+
+        [Required]
+        public MembershipType MembershipType { get; set; } // Membership type
+
+        [Required]
+        public DateTime StartDate { get; set; }
+
+        [Required]
+        public DateTime EndDate { get; set; }
+
+        public int FreeTickets { get; set; }
+
+        public decimal DiscountPercentage { get; set; }
+
+        public string description { get; set; }
     }
 }
