@@ -25,5 +25,8 @@ namespace KartingSystemSimulation.DTOs.GameDTOs
         [Required(ErrorMessage = "RacerIds is required.")]
         [MinLength(1, ErrorMessage = "At least one RacerId must be provided.")]
         public List<int> RacerIds { get; set; } // List of Racer IDs participating in the race
+        // Added properties
+        public List<int> TopRacers { get; set; } // List of top racers' IDs
+        public string LiveRaceUpdates { get; set; } // Live updates as a string (you may choose a more appropriate structure)
     }
 }

@@ -43,7 +43,7 @@ namespace KartingSystemSimulation.DTOs
         public int? SupervisorId { get; set; } // Optional supervisor ID for underage racers
 
         //[Required(ErrorMessage = "Membership type is required.")]
-        //[RegularExpression("(Gold|Diamond|Normal)", ErrorMessage = "Membership must be 'Gold', 'Diamond', or 'Normal'.")]
+        [RegularExpression("(Gold|Diamond|Normal)", ErrorMessage = "Membership must be 'Gold', 'Diamond', or 'Normal'.")]
         public Membership Membership { get; set; }
 
         [Required(ErrorMessage = "LoginEmail is required.")]
