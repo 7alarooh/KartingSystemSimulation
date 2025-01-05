@@ -92,6 +92,8 @@ namespace KartingSystemSimulation.Services
             <ul>
                 <li>Email: {racer.Email}</li>
                 <li>Password: {racerInput.Password}</li>
+                <li>MembershipType: {racerInput.Membership.MembershipType}</li>
+                <li>Remaining Free Tickets: {racerInput.Membership.FreeTickets}
             </ul>
             <p><strong>Note:</strong> Please do not share your login credentials with anyone.</p>
             <p>Enjoy your karting experience!</p>";

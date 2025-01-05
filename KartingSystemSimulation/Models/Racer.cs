@@ -32,5 +32,7 @@ namespace KartingSystemSimulation.Models
         public Kart AssignedKart { get; set; } // Navigation Property
         public LiveRace LiveRace { get; set; } // Navigation Property
         public ICollection<RaceHistory> RaceHistories { get; set; } // Navigation Property
+        
+
     }
 }
