@@ -1,4 +1,4 @@
-﻿using KartingSystemSimulation.DTOs;
+﻿using KartingSystemSimulation.DTOs.GameDTOs;
 
 namespace KartingSystemSimulation.Services
 {

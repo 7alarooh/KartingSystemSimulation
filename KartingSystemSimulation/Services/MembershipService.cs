@@ -35,7 +35,7 @@ namespace KartingSystemSimulation.Services
             var membership = new Membership
             {
                 RacerId = membershipInput.RacerId,
-                MembershipType = membershipInput.MembershipType.ToString(),
+                MembershipType = membershipInput.MembershipType,
                 StartDate = membershipInput.StartDate,
                 EndDate = endDate,
                 FreeTickets = membershipInput.FreeTickets,
@@ -109,7 +109,7 @@ namespace KartingSystemSimulation.Services
             var membership = _membershipRepository.GetMembershipById(membershipId);
             if (membership == null) return false;
 
-            membership.MembershipType = membershipInput.MembershipType.ToString();
+            membership.MembershipType = membershipInput.MembershipType;
             membership.StartDate = membershipInput.StartDate;
             membership.EndDate = membershipInput.StartDate.AddMonths(membershipInput.DurationMonths);
             membership.FreeTickets = membershipInput.MembershipType == MembershipType.Dimond ? 10 : 0;

@@ -38,6 +38,7 @@ namespace KartingSystemSimulation
             builder.Services.AddScoped<IRaceBookingRepository, RaceBookingRepository>();
             builder.Services.AddScoped<ILiveRaceRepository, LiveRaceRepository>();
             builder.Services.AddScoped<IMembershipRepository,  MembershipRepository>();
+            builder.Services.AddScoped<ILeaderboardRepository, LeaderboardRepository>();
 
             // Register services
             builder.Services.AddScoped<IAdminService, AdminService>();
@@ -50,6 +51,7 @@ namespace KartingSystemSimulation
             builder.Services.AddScoped<IRaceBookingService, RaceBookingService>();
             builder.Services.AddScoped<ILiveRaceService, LiveRaceService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
+            builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
             // AutoMapper configuration
             builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddScoped<IMembershipService, MembershipService>();

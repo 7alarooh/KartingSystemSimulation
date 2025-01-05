@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace KartingSystemSimulation.DTOs
+namespace KartingSystemSimulation.DTOs.GameDTOs
 {
     public class GameInputDTO
     {
