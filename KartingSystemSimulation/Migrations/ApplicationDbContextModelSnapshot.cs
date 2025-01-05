@@ -139,7 +139,13 @@ namespace KartingSystemSimulation.Migrations
                     b.Property<int>("Period")
                         .HasColumnType("int");
 
+                    b.Property<int>("Position")
+                        .HasColumnType("int");
+
                     b.Property<int>("RacerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StarsEarned")
                         .HasColumnType("int");
 
                     b.HasKey("LeaderboardId");
@@ -223,9 +229,8 @@ namespace KartingSystemSimulation.Migrations
                     b.Property<int>("FreeTickets")
                         .HasColumnType("int");
 
-                    b.Property<string>("MembershipType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("MembershipType")
+                        .HasColumnType("int");
 
                     b.Property<int>("RacerId")
                         .HasColumnType("int");
