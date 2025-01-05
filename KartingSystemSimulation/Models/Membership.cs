@@ -29,5 +29,7 @@ namespace KartingSystemSimulation.Models
         public int FreeTickets { get; set; }
 
         public decimal DiscountPercentage { get; set; }
+
+        public string description { get; set; }
     }
 }
