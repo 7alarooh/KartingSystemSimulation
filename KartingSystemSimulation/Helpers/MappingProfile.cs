@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using KartingSystemSimulation.DTOs;
-using KartingSystemSimulation.DTOs.MembershipDTOs;
 using KartingSystemSimulation.Models;
 
 namespace KartingSystemSimulation.Mapping
@@ -17,11 +16,6 @@ namespace KartingSystemSimulation.Mapping
             CreateMap<SupervisorInputDTO, Supervisor>();
             CreateMap<RaceHistory, RaceHistoryDTO>().ReverseMap();
 
-            // Map Racer to RacerOutputDTO
-            CreateMap<Racer, RacerOutputDTO>()
-                .ForMember(dest => dest.Membership, opt => opt.MapFrom(src => src.Membership));
-            // Map Membership to MembershipOutputDTO
-            CreateMap<Membership, MembershipOutputDTO>();
 
         }
     }
