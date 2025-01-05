@@ -1,6 +1,7 @@
 ﻿using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using System.ComponentModel.DataAnnotations;
+using KartingSystemSimulation.DTOs.MembershipDTOs;
 
 namespace KartingSystemSimulation.DTOs
 {
