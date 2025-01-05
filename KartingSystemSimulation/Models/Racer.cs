@@ -25,6 +25,7 @@ namespace KartingSystemSimulation.Models
         public byte[]? Picture { get; set; }
 
         // Configure one-to-one navigation
+        //
         public Membership Membership { get; set; }
 
         public int? AssignedKartId { get; set; }

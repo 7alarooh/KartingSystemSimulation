@@ -4,6 +4,7 @@
 
 namespace KartingSystemSimulation.Migrations
 {
+    //
     /// <inheritdoc />
     public partial class addDescription : Migration
     {

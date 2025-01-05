@@ -7,6 +7,7 @@ namespace KartingSystemSimulation.Models
 {
     public class Membership
     {
+        //
         [Key]
         public int MembershipId { get; set; } // Primary Key
 

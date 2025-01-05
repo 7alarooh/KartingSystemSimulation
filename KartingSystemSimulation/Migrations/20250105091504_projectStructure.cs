@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace KartingSystemSimulation.Migrations
 {
+
+    //
     /// <inheritdoc />
     public partial class projectStructure : Migration
     {
