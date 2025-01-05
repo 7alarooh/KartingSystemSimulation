@@ -67,7 +67,7 @@ namespace KartingSystemSimulation.Controllers
 
         // PUT: api/Game/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGame(int id, [FromBody] GameDTO gameUpdate)
+        public async Task<IActionResult> UpdateGame(int id, [FromBody] GameInputDTO gameUpdate)
         {
             if (!ModelState.IsValid)
             {
