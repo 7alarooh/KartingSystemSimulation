@@ -8,6 +8,7 @@ namespace KartingSystemSimulation.Repositories
         void DeleteRacer(Racer racer);
         IEnumerable<Racer> GetAllRacers();
         Racer GetRacerById(int racerId);
+        IEnumerable<Supervisor> GetRelatedSupervisors(int racerId);
         void UpdateRacer(Racer racer);
     }
 }

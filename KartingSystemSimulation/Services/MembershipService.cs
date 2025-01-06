@@ -3,6 +3,7 @@ using KartingSystemSimulation.DTOs.MembershipDTOs;
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 
 namespace KartingSystemSimulation.Services
@@ -11,11 +12,13 @@ namespace KartingSystemSimulation.Services
     {
         private readonly IMembershipRepository _membershipRepository;
         private readonly IRacerRepository _racerRepository;
+        private readonly ISupervisorRacerRepository _supervisorRacerRepository;
 
-        public MembershipService(IMembershipRepository membershipRepository, IRacerRepository racerRepository)
+        public MembershipService(IMembershipRepository membershipRepository, IRacerRepository racerRepository, ISupervisorRacerRepository supervisorRacerRepository)
         {
             _membershipRepository = membershipRepository; // Inject Membership Repository
             _racerRepository = racerRepository; // Inject Racer Repository
+            _supervisorRacerRepository = supervisorRacerRepository;
         }
 
         // Add a new membership
@@ -129,5 +132,26 @@ namespace KartingSystemSimulation.Services
             _membershipRepository.DeleteMembership(membership);
             return true;
         }
+        // Check if the supervisor is related to the racer
+        public bool IsSupervisorRelatedToRacer(string supervisorEmail, int membershipId)
+        {
+            var membership = _membershipRepository.GetMembershipById(membershipId);
+            if (membership == null) return false;
+
+            // Assuming there's a method to fetch related supervisors for a racer
+            var relatedSupervisors = _racerRepository.GetRelatedSupervisors(membership.RacerId);
+            return relatedSupervisors.Any(supervisor => supervisor.Email.Equals(supervisorEmail, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public bool IsRacerMembershipOwner(string racerEmail, int membershipId)
+        {
+            var membership = _membershipRepository.GetMembershipById(membershipId);
+            if (membership == null) return false;
+
+            var racer = _racerRepository.GetRacerById(membership.RacerId);
+            return racer != null && racer.Email.Equals(racerEmail, StringComparison.OrdinalIgnoreCase);
+        }
+
+
     }
 }
