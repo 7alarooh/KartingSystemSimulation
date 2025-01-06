@@ -1,6 +1,7 @@
 ﻿using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,6 @@ using System.Linq;
 
 namespace KartingSystemSimulation.Services
 {
-
 
     public class RacerService : IRacerService
     {
@@ -28,7 +28,7 @@ namespace KartingSystemSimulation.Services
             _emailService = EmailService;
             _membershipService = membershipService;
             this._context = applicationDbContext;
-            
+
         }
 
         // Add a new racer
@@ -48,11 +48,11 @@ namespace KartingSystemSimulation.Services
             using var transaction = _context.Database.BeginTransaction();// Begin transaction
             try
             {
-                
+
                 // Step 1: Calculate age
                 var age = CalculateAge(racerInput.DOB);
 
-                
+
 
                 // Step 2: Add supervisor if under 18
                 Supervisor supervisor = null;
@@ -203,5 +203,16 @@ namespace KartingSystemSimulation.Services
 
             _racerRepository.DeleteRacer(racer);
         }
+
+        //to check if a supervisor is related to a racer.
+        public bool IsSupervisorRelatedToRacer(string supervisorEmail, int racerId)
+        {
+            // Check if the supervisor is related to the given racer
+            var supervisorRacer = _context.SupervisorRacers
+                .FirstOrDefault(sr => sr.RacerId == racerId && sr.Supervisor.Email == supervisorEmail);
+
+            return supervisorRacer != null;
+        }
+
     }
 }

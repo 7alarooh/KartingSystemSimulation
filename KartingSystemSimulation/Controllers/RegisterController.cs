@@ -2,6 +2,7 @@
 using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
+using Microsoft.AspNetCore.Authorization; // Required for role-based authorization
 using Microsoft.AspNetCore.Mvc;
 
 namespace KartingSystemSimulation.Controllers
@@ -23,15 +24,17 @@ namespace KartingSystemSimulation.Controllers
 
         /// <summary>
         /// Registers a new admin and adds to both Admin and User tables.
+        /// Accessible only to users with the Admin role.
         /// </summary>
         /// <param name="adminDto">Admin input DTO</param>
         /// <returns>ActionResult indicating success or failure</returns>
+        [Authorize(Roles = "Admin")] // Restrict access to Admin role only
         [HttpPost("admin")]
         public IActionResult RegisterAdmin([FromBody] AdminInputDTO adminDto)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // Return validation errors.
+                return BadRequest(ModelState); // Return validation errors
             }
 
             try
