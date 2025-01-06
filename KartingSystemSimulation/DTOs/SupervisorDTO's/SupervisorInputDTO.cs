@@ -21,5 +21,8 @@ namespace KartingSystemSimulation.DTOs
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; } // Validated email
+
+        [Required]
+        public string Password { get; set; }
     }
 }

@@ -100,7 +100,7 @@ namespace KartingSystemSimulation.Services
                 }
 
                 // Save supervisor
-                var hashedPassword = HashPassword("DefaultPassword123");
+                var hashedPassword = HashPassword(supervisorDto.Password);
                 var supervisor = new Supervisor
                 {
                     Name = supervisorDto.Name,

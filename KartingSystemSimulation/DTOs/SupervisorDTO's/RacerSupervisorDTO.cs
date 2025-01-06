@@ -11,5 +11,7 @@ namespace KartingSystemSimulation.DTOs
         public string Phone { get; set; } // Contact number
 
         public string Email { get; set; } // Validated email
+
+        public string Password { get; set; }
     }
 }
