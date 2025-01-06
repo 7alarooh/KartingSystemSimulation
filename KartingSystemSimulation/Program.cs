@@ -109,6 +109,7 @@ namespace KartingSystemSimulation
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
+                c.SwaggerDoc("v2", new OpenApiInfo { Title = "My API", Version = "v1" });
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -142,6 +143,7 @@ namespace KartingSystemSimulation
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapControllers();
+            app.UseDeveloperExceptionPage();
 
             app.Run();
         }
