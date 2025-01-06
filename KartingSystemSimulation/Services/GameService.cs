@@ -8,10 +8,12 @@ namespace KartingSystemSimulation.Services
     public class GameService : IGameService
     {
         private readonly IGameRepository _gameRepository;
+        private readonly IRacerService _racerService;
 
-        public GameService(IGameRepository gameRepository)
+        public GameService(IGameRepository gameRepository, IRacerService racerService)
         {
             _gameRepository = gameRepository;
+            _racerService = racerService;
         }
 
         // Create a new game
@@ -30,7 +32,11 @@ namespace KartingSystemSimulation.Services
 
             // Add the game to the repository (database)
             _gameRepository.AddGame(game);
-
+            var racerNames = new List<string>();
+            for (int i = 0; i < gameInput.RacerIds.Count; i++)
+            {
+                racerNames.Add(_racerService.GetRacerById(gameInput.RacerIds[i]).FirstName + " "+ _racerService.GetRacerById(gameInput.RacerIds[i]).LastName);
+            }
             // Return the output DTO for the newly created game
             return new GameOutputDTO
             {
@@ -39,7 +45,7 @@ namespace KartingSystemSimulation.Services
                 Laps = game.Laps,
                 RaceDate = game.RaceDate,
                 KartId = game.KartId,
-                RacerNames = new List<string>(), // Initially empty, will be filled later
+                RacerNames = racerNames, // Initially empty, will be filled later
                 TopRacers = new List<int>() // Initially empty, will be updated later
             };
         }
@@ -68,6 +74,7 @@ namespace KartingSystemSimulation.Services
         public async Task<GameOutputDTO> GetGameByIdAsync(int gameId)
         {
             var game = _gameRepository.GetGameById(gameId);
+
             if (game == null)
             {
                 throw new KeyNotFoundException($"Game with ID {gameId} not found.");
