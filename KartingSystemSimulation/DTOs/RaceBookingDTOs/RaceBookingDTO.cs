@@ -5,8 +5,8 @@ namespace KartingSystemSimulation.DTOs
 {
     public class RaceBookingDTO
     {
-        //[Required]
-        //public int GameId { get; set; }
+        [Required]
+        public int GameId { get; set; }
         [Required(ErrorMessage = "BookingId is required.")]
         public int BookingId { get; set; } // Primary key
 
