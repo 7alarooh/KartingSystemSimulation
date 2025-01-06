@@ -1,11 +1,13 @@
 ﻿using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KartingSystemSimulation.Controllers
 {
     [ApiController]
     [Route("api/karts")]
+    [Authorize(Roles = "Admin")] // Restrict all actions to Admin role only
     public class KartController : ControllerBase
     {
         private readonly IKartService _kartService; // Service to handle kart logic
