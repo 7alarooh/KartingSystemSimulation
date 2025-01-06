@@ -13,7 +13,7 @@ namespace KartingSystemSimulation.Repositories
 
         public IEnumerable<SupervisorRacer> GetAllSupervisorRacers() => _context.SupervisorRacers.ToList();
         public SupervisorRacer GetSupervisorRacerById(int supervisorId, int racerId)
-            => _context.SupervisorRacers.Find(supervisorId, racerId);
+    => _context.SupervisorRacers.FirstOrDefault(sr => sr.SupervisorId == supervisorId && sr.RacerId == racerId);
         public void AddSupervisorRacer(SupervisorRacer supervisorRacer)
         {
             _context.SupervisorRacers.Add(supervisorRacer);
@@ -24,6 +24,7 @@ namespace KartingSystemSimulation.Repositories
             _context.SupervisorRacers.Remove(supervisorRacer);
             _context.SaveChanges();
         }
+       
     }
 
 }
