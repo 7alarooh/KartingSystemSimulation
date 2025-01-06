@@ -53,7 +53,7 @@ namespace KartingSystemSimulation.Controllers
             }
         }
 
-        // Update a game with top racers and live race updates.
+        // Update a game with top racers and live race updates
         [HttpPut("{gameId}")]
         public async Task<IActionResult> UpdateGame(int gameId, [FromBody] UpdateGameDTO updateGameDto)
         {
