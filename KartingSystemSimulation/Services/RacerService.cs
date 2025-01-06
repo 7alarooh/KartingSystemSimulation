@@ -34,11 +34,25 @@ namespace KartingSystemSimulation.Services
         // Add a new racer
         public void AddRacer(RacerInputDTO racerInput)
         {
+
+            var userCheck = _userService.GetAll().FirstOrDefault(u => u.LoginEmail == racerInput.supervisor.Email);
+            if (userCheck == null)
+            {
+                _userService.AddUser(new UserInputDTO
+                {
+                    LoginEmail = racerInput.supervisor.Email,
+                    Password = racerInput.supervisor.Password,
+                    Role = "Supervisor"
+                });
+            }
             using var transaction = _context.Database.BeginTransaction();// Begin transaction
             try
             {
+                
                 // Step 1: Calculate age
                 var age = CalculateAge(racerInput.DOB);
+
+                
 
                 // Step 2: Add supervisor if under 18
                 Supervisor supervisor = null;
@@ -49,7 +63,7 @@ namespace KartingSystemSimulation.Services
                         Name = racerInput.supervisor.Name,
                         Email = racerInput.supervisor.Email,
                         CivilId = racerInput.supervisor.CivilId,
-                        Phone = racerInput.supervisor.Phone
+                        Phone = racerInput.supervisor.Phone,
                     };
                     supervisor = _SupervisorService.AddSupervisor(supervisorDto); // Save supervisor
                 }

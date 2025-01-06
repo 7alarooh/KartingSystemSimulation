@@ -14,7 +14,7 @@ namespace KartingSystemSimulation.Services
         // Added for testing only
         User TestAddUser(UserInputDTO userInputDTO);
         // The AuthenticateUser method
-        UserOutputDTO AuthenticateUser(string email, string password);
+        string AuthenticateUser(string email, string password);
 
     }
 }

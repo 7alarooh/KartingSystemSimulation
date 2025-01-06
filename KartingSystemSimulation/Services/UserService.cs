@@ -27,12 +27,14 @@ namespace KartingSystemSimulation.Services
             _config = config;
         }
 
+        // Fetch all users and map to DTO
         public IEnumerable<UserOutputDTO> GetAll()
         {
             var users = _userRepository.GetAllUsers();
             return _mapper.Map<IEnumerable<UserOutputDTO>>(users);
         }
 
+        // Fetch a specific user by ID and map to DTO
         public UserOutputDTO GetById(int userId)
         {
             var user = _userRepository.GetUserById(userId);
@@ -41,12 +43,13 @@ namespace KartingSystemSimulation.Services
             return _mapper.Map<UserOutputDTO>(user);
         }
 
+        // Add a new user to the system
         public void AddUser(UserInputDTO userDto)
         {
-            if (!IsValidEmail(userDto.LoginEmail))
+            if (!IsValidEmail(userDto.LoginEmail)) // Validate email format
                 throw new ArgumentException("Invalid email format.");
 
-            if (!IsValidPassword(userDto.Password))
+            if (!IsValidPassword(userDto.Password)) // Validate password strength
                 throw new ArgumentException("Password must be at least 8 characters.");
 
             var user = _mapper.Map<User>(userDto);
@@ -54,8 +57,7 @@ namespace KartingSystemSimulation.Services
             _userRepository.AddUser(user);
         }
 
-
-        // Added For Testing only
+        // Add user for testing purposes only
         public User TestAddUser(UserInputDTO userInputDTO)
         {
             if (!IsValidEmail(userInputDTO.LoginEmail))
@@ -68,6 +70,7 @@ namespace KartingSystemSimulation.Services
             return user;
         }
 
+        // Update an existing user's details
         public void Update(int userId, UserInputDTO userDto)
         {
             var existingUser = _userRepository.GetUserById(userId);
@@ -81,6 +84,7 @@ namespace KartingSystemSimulation.Services
             _userRepository.UpdateUser(existingUser);
         }
 
+        // Delete a user with admin authorization
         public void Delete(int userId, string adminEmail)
         {
             var user = _userRepository.GetUserById(userId);
@@ -94,26 +98,22 @@ namespace KartingSystemSimulation.Services
             _userRepository.DeleteUser(user);
         }
 
-
-        public UserOutputDTO AuthenticateUser(string email, string password)
+        // Authenticate a user and generate JWT token
+        public string AuthenticateUser(string email, string password)
         {
             var user = _userRepository.GetUserByEmail(email);
-            if (user == null || !VerifyPassword(password, user.LoginPassword))
+            if (user == null || !VerifyPassword(password, user.LoginPassword)) // Validate email and password
             {
                 throw new UnauthorizedAccessException("Invalid credentials.");
             }
 
-            var permissions = GetUserPermissions(user.Role); // Fetch permissions based on role or other criteria
-            var token = GenerateJwtToken(user.LoginEmail, user.Role.ToString(), permissions);
+            var role = Enum.Parse<Role>(user.Role.ToString()); // Fetch user role
+            var permissions = GetUserPermissions(role); // Fetch permissions for the role
 
-            return new UserOutputDTO
-            {
-                LoginEmail = user.LoginEmail,
-                Role = user.Role.ToString(),
-                Token = token
-            };
+            return GenerateJwtToken(user.LoginEmail, role.ToString(), permissions); // Generate JWT token
         }
 
+        // Generate a JWT token with claims
         private string GenerateJwtToken(string email, string role, string permissions)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
@@ -123,31 +123,35 @@ namespace KartingSystemSimulation.Services
                 throw new ArgumentNullException("JWT secret key is not configured.");
             }
 
+            // Define claims for the token
             var claims = new List<Claim>
-    {
-        new Claim(JwtRegisteredClaimNames.Sub, email),
-        new Claim(ClaimTypes.Role, role),
-        new Claim(JwtRegisteredClaimNames.Email, email),
-        new Claim("Permissions", permissions)
-    };
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, email),
+                new Claim(ClaimTypes.Role, role),
+                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim("Permissions", permissions) // Custom permissions
+            };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            // Create the token
             var token = new JwtSecurityToken(
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpiryInMinutes"])),
                 signingCredentials: creds
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token); // Return token string
         }
 
+        // Verify if the provided password matches the stored hashed password
         private bool VerifyPassword(string enteredPassword, string storedHashedPassword)
         {
             return HashPassword(enteredPassword) == storedHashedPassword;
         }
 
+        // Get permissions based on user role
         private string GetUserPermissions(Role role)
         {
             return role switch
@@ -159,21 +163,21 @@ namespace KartingSystemSimulation.Services
             };
         }
 
-
-
-        // Helper methods for validation and hashing
+        // Validate if the email format is correct
         private bool IsValidEmail(string email)
         {
             return new System.ComponentModel.DataAnnotations.EmailAddressAttribute().IsValid(email);
         }
 
+        // Hash the password using SHA256
         private string HashPassword(string password)
         {
             using var sha256 = System.Security.Cryptography.SHA256.Create();
-            var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
             return Convert.ToBase64String(hashedBytes);
         }
 
+        // Check if the password meets minimum strength requirements
         private bool IsValidPassword(string password)
         {
             return password.Length >= 8; // Example: Ensure password has at least 8 characters
