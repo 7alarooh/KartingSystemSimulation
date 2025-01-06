@@ -3,6 +3,7 @@ using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
+using Microsoft.AspNetCore.Authorization; // For role-based authorization
 using Microsoft.AspNetCore.Mvc;
 
 namespace KartingSystemSimulation.Controllers
@@ -21,111 +22,149 @@ namespace KartingSystemSimulation.Controllers
             _mapper = mapper; // Maps between domain models and DTOs
         }
 
-        // Get all supervisors
+        /// <summary>
+        /// Get all supervisors (Admin only).
+        /// </summary>
+        /// <returns>List of SupervisorOutputDTO</returns>
+        [Authorize(Roles = "Admin")] // Restrict to Admin role only
         [HttpGet]
         public IActionResult GetAllSupervisors()
         {
-            // Fetch all supervisors from the service layer
             var supervisors = _supervisorService.GetAllSupervisors();
-
-            // Convert domain models to DTOs for client response
             var result = _mapper.Map<IEnumerable<SupervisorOutputDTO>>(supervisors);
-
-            return Ok(result); // Return HTTP 200 with the list of supervisors
+            return Ok(result);
         }
 
-        // Get a supervisor by ID
+        /// <summary>
+        /// Get a supervisor by ID. Admins can view any supervisor's details; supervisors can view their own details only.
+        /// </summary>
+        /// <param name="id">Supervisor ID</param>
+        /// <returns>Supervisor details</returns>
         [HttpGet("{id}")]
         public IActionResult GetSupervisorById(int id)
         {
             try
             {
-                // Fetch a specific supervisor by ID
+                // Get the email and role of the currently logged-in user
+                var currentUserEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value;
+                var currentUserRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+
+                if (string.IsNullOrEmpty(currentUserEmail) || string.IsNullOrEmpty(currentUserRole))
+                {
+                    return Unauthorized("Unauthorized: Unable to retrieve user details.");
+                }
+
+                // Retrieve the supervisor's details by ID
                 var supervisor = _supervisorService.GetSupervisorById(id);
 
-                // Convert the domain model to DTO for client response
+                if (supervisor == null)
+                {
+                    return NotFound(new { ErrorCode = "NotFound", ErrorMessage = "Supervisor not found." });
+                }
+
+                // Check if the user is an admin or the current supervisor
+                if (currentUserRole != "Admin" && !supervisor.Email.Equals(currentUserEmail, StringComparison.OrdinalIgnoreCase))
+                {
+                    return Forbid(); // Use Forbid() without parameters
+                }
+
+                // Map the supervisor entity to a DTO
                 var result = _mapper.Map<SupervisorOutputDTO>(supervisor);
 
-                return Ok(result); // Return HTTP 200 with the supervisor data
+                // Return the supervisor's details
+                return Ok(result);
             }
             catch (KeyNotFoundException ex)
             {
-                // Handle the case where the supervisor is not found
-                return NotFound(new { ErrorCode = ErrorCode.NotFound.ToString(), ErrorMessage = ex.Message });
+                return NotFound(new { ErrorCode = "NotFound", ErrorMessage = ex.Message });
             }
-            catch (ArgumentException ex)
+            catch (Exception ex)
             {
-                // Handle invalid input errors
-                return BadRequest(new { ErrorCode = ErrorCode.ValidationError.ToString(), ErrorMessage = ex.Message });
+                return StatusCode(500, new { Message = "An unexpected error occurred.", Error = ex.Message });
             }
         }
 
-        // Update an existing supervisor
+        /// <summary>
+        /// Update an existing supervisor (Admin only).
+        /// </summary>
+        /// <param name="id">Supervisor ID</param>
+        /// <param name="supervisorDto">Supervisor update data</param>
+        /// <returns>Status message</returns>
+        [Authorize(Roles = "Admin")] // Restrict to Admin role only
         [HttpPut("{id}")]
         public IActionResult UpdateSupervisor(int id, [FromBody] SupervisorOutputDTO supervisorDto)
         {
-            // Check if the input data is valid
             if (!ModelState.IsValid)
                 return BadRequest(new { ErrorCode = ErrorCode.ValidationError.ToString(), ErrorMessage = "Invalid supervisor data." });
 
             try
             {
-                // Map the DTO to the domain model
                 var supervisor = _mapper.Map<Supervisor>(supervisorDto);
-                supervisor.SupervisorId = id; // Ensure the ID is correctly set
-
-                // Update the supervisor through the service layer
+                supervisor.SupervisorId = id;
                 _supervisorService.UpdateSupervisor(supervisor);
-
-                return NoContent(); // Return HTTP 204 for a successful update
+                return NoContent();
             }
             catch (KeyNotFoundException ex)
             {
-                // Handle the case where the supervisor is not found
                 return NotFound(new { ErrorCode = ErrorCode.NotFound.ToString(), ErrorMessage = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                // Handle invalid update operations
                 return BadRequest(new { ErrorCode = ErrorCode.OperationNotAllowed.ToString(), ErrorMessage = ex.Message });
             }
         }
-
-        // Delete a supervisor by ID
+        /// <summary>
+        /// Delete a supervisor (Admin only).
+        /// </summary>
+        /// <param name="id">Supervisor ID</param>
+        /// <returns>Status message</returns>
+        [Authorize(Roles = "Admin")] // Restrict to Admin role only
         [HttpDelete("{id}")]
         public IActionResult DeleteSupervisor(int id)
         {
             try
             {
-                // Delete the supervisor through the service layer
                 _supervisorService.DeleteSupervisor(id);
-
-                return NoContent(); // Return HTTP 204 for a successful deletion
+                return NoContent();
             }
             catch (KeyNotFoundException ex)
             {
-                // Handle the case where the supervisor is not found
                 return NotFound(new { ErrorCode = ErrorCode.NotFound.ToString(), ErrorMessage = ex.Message });
             }
             catch (ArgumentException ex)
             {
-                // Handle invalid delete operations
                 return BadRequest(new { ErrorCode = ErrorCode.OperationNotAllowed.ToString(), ErrorMessage = ex.Message });
             }
         }
 
         //----------------------------------------------
+        /// <summary>
+        /// Add a new supervisor (Admin only).
+        /// </summary>
+        /// <param name="supervisorInput">Supervisor input data</param>
+        /// <returns>Supervisor ID</returns>
+        [Authorize(Roles = "Admin")] // Restrict to Admin role only
         [HttpPost("AddSupervisor")]
-        public IActionResult AddSupervisor([FromBody] SupervisorInputDTO supervisorInput) 
-        { 
+        public IActionResult AddSupervisor([FromBody] SupervisorInputDTO supervisorInput)
+        {
             try
             {
+                // Call the service layer to add a new supervisor
+                // The service returns the newly created supervisor's ID
                 var supervisorId = _supervisorService.AddSupervisor(supervisorInput);
-                return Ok(supervisorId);
+
+                // Return success response with the supervisor's ID
+                return Ok(new { SupervisorId = supervisorId, Message = "Supervisor added successfully." });
+            }
+            catch (ArgumentException ex)
+            {
+                // Handle validation or business logic errors
+                return BadRequest(new { ErrorCode = ErrorCode.ValidationError.ToString(), ErrorMessage = ex.Message });
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                // Handle unexpected errors
+                return StatusCode(500, new { ErrorCode = ErrorCode.UnknownError.ToString(), ErrorMessage = ex.Message });
             }
         }
 
