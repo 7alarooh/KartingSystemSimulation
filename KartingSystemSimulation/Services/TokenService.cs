@@ -27,12 +27,12 @@ namespace KartingSystemSimulation.Services
             }
 
             var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, email),
-                new Claim(ClaimTypes.Role, role),
-                new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim("Permissions", permissions)
-            };
+    {
+        new Claim(JwtRegisteredClaimNames.Sub, email),
+        new Claim(ClaimTypes.Role, role),
+        new Claim(JwtRegisteredClaimNames.Email, email),
+        new Claim("Permissions", permissions) // Custom permissions
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -45,5 +45,6 @@ namespace KartingSystemSimulation.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }

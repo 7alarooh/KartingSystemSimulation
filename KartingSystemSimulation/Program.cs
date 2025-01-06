@@ -2,9 +2,8 @@ using KartingSystemSimulation.Repositories;
 using KartingSystemSimulation.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using Swashbuckle.AspNetCore.SwaggerGen; // Required for SwaggerGen
-
+using Microsoft.IdentityModel.Tokens;// For SymmetricSecurityKey and TokenValidationParameters
+using System.Text; // For Encoding
 
 namespace KartingSystemSimulation
 {
@@ -19,6 +18,24 @@ namespace KartingSystemSimulation
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+            builder.Services.AddAuthentication("Bearer")
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                        ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+                    };
+                });
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+            });
 
             // Register repositories
             builder.Services.AddScoped<IAdminRepository, AdminRepository>();
@@ -51,7 +68,8 @@ namespace KartingSystemSimulation
             builder.Services.AddScoped<IRaceBookingService, RaceBookingService>();
             builder.Services.AddScoped<ILiveRaceService, LiveRaceService>();
             builder.Services.AddScoped<IEmailService, EmailService>();
-            builder.Services.AddScoped<ILeaderboardService, LeaderboardService>();
+            builder.Services.AddScoped<ILeaderboardService, LeaderboardService>(); 
+            builder.Services.AddScoped<ITokenService, TokenService>();
             // AutoMapper configuration
             builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddScoped<IMembershipService, MembershipService>();
@@ -120,10 +138,8 @@ namespace KartingSystemSimulation
             }
          
             app.UseHttpsRedirection();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.MapControllers();
 
             app.Run();
