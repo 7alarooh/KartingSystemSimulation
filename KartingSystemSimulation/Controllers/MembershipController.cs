@@ -1,6 +1,8 @@
 ﻿using KartingSystemSimulation.DTOs.MembershipDTOs;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace KartingSystemSimulation.Controllers
 {
@@ -19,6 +21,14 @@ namespace KartingSystemSimulation.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<MembershipOutputDTO>> GetAllMemberships()
         {
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
+
             var memberships = _membershipService.GetAllMemberships();
             return Ok(memberships);
         }
@@ -27,6 +37,14 @@ namespace KartingSystemSimulation.Controllers
         [HttpGet("{membershipId}")]
         public ActionResult<MembershipOutputDTO> GetMembershipById(int membershipId)
         {
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
+
             var membership = _membershipService.GetMembershipById(membershipId);
             if (membership == null)
                 return NotFound($"Membership with ID {membershipId} not found.");
@@ -38,6 +56,14 @@ namespace KartingSystemSimulation.Controllers
         [HttpPost]
         public ActionResult AddMembership([FromBody] MembershipInputDTO membershipInput)
         {
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -49,6 +75,14 @@ namespace KartingSystemSimulation.Controllers
         [HttpPut("{membershipId}")]
         public ActionResult UpdateMembership(int membershipId, [FromBody] MembershipInputDTO membershipInput)
         {
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
@@ -63,6 +97,13 @@ namespace KartingSystemSimulation.Controllers
         [HttpDelete("{membershipId}")]
         public ActionResult DeleteMembership(int membershipId)
         {
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
             var success = _membershipService.DeleteMembership(membershipId);
             if (!success)
                 return NotFound($"Membership with ID {membershipId} not found.");

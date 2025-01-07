@@ -5,6 +5,8 @@ using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Authorization; // For role-based authorization
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace KartingSystemSimulation.Controllers
 {
@@ -26,10 +28,18 @@ namespace KartingSystemSimulation.Controllers
         /// Get all supervisors (Admin only).
         /// </summary>
         /// <returns>List of SupervisorOutputDTO</returns>
-        [Authorize(Roles = "Admin")] // Restrict to Admin role only
+      
         [HttpGet]
         public IActionResult GetAllSupervisors()
-        {
+        {  // Restrict to Admin role only
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
+            //
             var supervisors = _supervisorService.GetAllSupervisors();
             var result = _mapper.Map<IEnumerable<SupervisorOutputDTO>>(supervisors);
             return Ok(result);
@@ -90,7 +100,6 @@ namespace KartingSystemSimulation.Controllers
         /// <param name="id">Supervisor ID</param>
         /// <param name="supervisorDto">Supervisor update data</param>
         /// <returns>Status message</returns>
-        [Authorize(Roles = "Admin")] // Restrict to Admin role only
         [HttpPut("{id}")]
         public IActionResult UpdateSupervisor(int id, [FromBody] SupervisorOutputDTO supervisorDto)
         {
@@ -99,6 +108,15 @@ namespace KartingSystemSimulation.Controllers
 
             try
             {
+
+                // Restrict to Admin role only
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
                 var supervisor = _mapper.Map<Supervisor>(supervisorDto);
                 supervisor.SupervisorId = id;
                 _supervisorService.UpdateSupervisor(supervisor);
@@ -118,12 +136,19 @@ namespace KartingSystemSimulation.Controllers
         /// </summary>
         /// <param name="id">Supervisor ID</param>
         /// <returns>Status message</returns>
-        [Authorize(Roles = "Admin")] // Restrict to Admin role only
         [HttpDelete("{id}")]
         public IActionResult DeleteSupervisor(int id)
         {
             try
             {
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
+
                 _supervisorService.DeleteSupervisor(id);
                 return NoContent();
             }

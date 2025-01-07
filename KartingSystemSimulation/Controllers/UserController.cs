@@ -11,7 +11,7 @@ using System.Text;
 
 namespace KartingSystemSimulation.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -63,12 +63,19 @@ namespace KartingSystemSimulation.Controllers
         /// </summary>
         /// <param name="id">User ID</param>
         /// <returns>UserOutputDTO</returns>
-        [Authorize(Roles = "Admin")]
+        
         [HttpGet("{id}")]
         public IActionResult GetUserById(int id)
         {
             try
             {
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
                 var user = _userService.GetById(id);
                 return Ok(user);
             }
@@ -84,7 +91,6 @@ namespace KartingSystemSimulation.Controllers
         /// </summary>
         /// <param name="userDto">User input DTO</param>
         /// <returns>Status message</returns>
-        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult AddUser([FromBody] UserInputDTO userDto)
         {
@@ -93,9 +99,18 @@ namespace KartingSystemSimulation.Controllers
             {
                 return BadRequest(new { ErrorCode = ErrorCode.ValidationError.ToString(), ErrorMessage = "Invalid input data." });
             }
-
             try
             {
+                
+
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
+
                 // Call the service layer to add the user
                 _userService.TestAddUser(userDto);
 
@@ -121,7 +136,6 @@ namespace KartingSystemSimulation.Controllers
         /// <param name="id">User ID</param>
         /// <param name="userDto">Updated user data</param>
         /// <returns>Status message</returns>
-        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult UpdateUser(int id, [FromBody] UserInputDTO userDto)
         {
@@ -133,6 +147,14 @@ namespace KartingSystemSimulation.Controllers
 
             try
             {
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
+
                 // Call the service layer to update the user
                 _userService.Update(id, userDto);
 
@@ -162,12 +184,19 @@ namespace KartingSystemSimulation.Controllers
         /// </summary>
         /// <param name="id">User ID</param>
         /// <returns>Status message</returns>
-        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult DeleteUser(int id)
         {
             try
             {
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
+
                 _userService.Delete(id, User.FindFirstValue(ClaimTypes.Email));
                 return Ok(new { message = "User deleted successfully." });
             }

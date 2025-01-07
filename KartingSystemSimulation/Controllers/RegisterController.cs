@@ -4,6 +4,8 @@ using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Authorization; // Required for role-based authorization
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace KartingSystemSimulation.Controllers
 {
@@ -28,7 +30,6 @@ namespace KartingSystemSimulation.Controllers
         /// </summary>
         /// <param name="adminDto">Admin input DTO</param>
         /// <returns>ActionResult indicating success or failure</returns>
-        [Authorize(Roles = "Admin")] // Restrict access to Admin role only
         [HttpPost("admin")]
         public IActionResult RegisterAdmin([FromBody] AdminInputDTO adminDto)
         {
@@ -39,6 +40,13 @@ namespace KartingSystemSimulation.Controllers
 
             try
             {
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
                 // Call the service to register the admin
                 _registerService.RegisterAdmin(adminDto);
                 return CreatedAtAction(nameof(RegisterAdmin), new { email = adminDto.Email }, adminDto); // Success response

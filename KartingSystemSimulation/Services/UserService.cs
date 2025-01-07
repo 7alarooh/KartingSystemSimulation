@@ -4,8 +4,10 @@ using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Enums;
 using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Repositories;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -114,6 +116,7 @@ namespace KartingSystemSimulation.Services
         }
 
         // Generate a JWT token with claims
+
         private string GenerateJwtToken(string email, string role, string permissions)
         {
             var jwtSettings = _config.GetSection("JwtSettings");
@@ -122,10 +125,9 @@ namespace KartingSystemSimulation.Services
             {
                 throw new ArgumentNullException("JWT secret key is not configured.");
             }
-
             // Define claims for the token
             var claims = new List<Claim>
-            {
+                       {
                 new Claim(JwtRegisteredClaimNames.Sub, email),
                 new Claim(ClaimTypes.Role, role),
                 new Claim(JwtRegisteredClaimNames.Email, email),
@@ -141,10 +143,9 @@ namespace KartingSystemSimulation.Services
                 expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["ExpiryInMinutes"])),
                 signingCredentials: creds
             );
-
             return new JwtSecurityTokenHandler().WriteToken(token); // Return token string
         }
-
+ 
         // Verify if the provided password matches the stored hashed password
         private bool VerifyPassword(string enteredPassword, string storedHashedPassword)
         {

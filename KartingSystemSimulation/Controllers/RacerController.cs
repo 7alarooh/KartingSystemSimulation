@@ -4,6 +4,8 @@ using KartingSystemSimulation.Models;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Authorization; // Added for role-based authorization
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 
 namespace KartingSystemSimulation.Controllers
@@ -30,9 +32,7 @@ namespace KartingSystemSimulation.Controllers
         /// </summary>
         /// <param name="racerInput">Racer input data</param>
         /// <returns>Status message</returns>
-        [Authorize(Roles = "Admin,Supervisor,Racer")] // Allow Admins, Supervisors, and Racers
         [HttpPost("AddRacer")]
-
         public IActionResult AddRacer([FromBody] RacerInputDTO racerInput)
         {
             if (!ModelState.IsValid)
@@ -42,25 +42,22 @@ namespace KartingSystemSimulation.Controllers
 
             try
             {
-                // Get the current user's role from the JWT token
-                var currentUserRole = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
-
-                if (string.IsNullOrEmpty(currentUserRole))
-                {
-                    return Unauthorized("Unauthorized: Unable to retrieve user details.");
-                }
+                // Restrict access to Admins only
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
 
                 // Calculate the racer's age
                 var racerAge = DateTime.Now.Year - racerInput.DOB.Year;
                 if (racerInput.DOB.Date > DateTime.Now.AddYears(-racerAge)) racerAge--;
 
                 // Role-based validation
-                if (currentUserRole == "Supervisor" && (racerAge < 6 || racerAge > 18))
+                if (role == "Supervisor" && (racerAge < 6 || racerAge > 18))
                 {
                     return Forbid("Supervisors can only add racers aged between 6 and 18.");
                 }
 
-                if (currentUserRole == "Racer" && racerAge <= 18)
+                if (role == "Racer" && racerAge <= 18)
                 {
                     return Forbid("Racers can only add themselves if they are over 18 years old.");
                 }
@@ -142,16 +139,22 @@ namespace KartingSystemSimulation.Controllers
         }
 
         // Get all racers (Admin only)
-        [Authorize(Roles = "Admin")] // Restrict access to Admins only
         [HttpGet]
         public IActionResult GetAllRacers()
-        {
+        {// Restrict access to Admins only
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
+
             var racers = _racerService.GetAllRacers();
             return Ok(racers);
         }
 
         // Update racer (Admin only)
-        [Authorize(Roles = "Admin")] // Restrict access to Admins only
         [HttpPut("{id}")]
         public IActionResult UpdateRacer(int id, [FromBody] RacerInputDTO racerInput)
         {
@@ -162,6 +165,15 @@ namespace KartingSystemSimulation.Controllers
 
             try
             {
+                // Restrict access to Admins only
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
+
                 _racerService.UpdateRacer(id, racerInput);
                 return Ok("Racer updated successfully.");
             }
@@ -176,12 +188,19 @@ namespace KartingSystemSimulation.Controllers
         }
 
         // Delete racer (Admin only)
-        [Authorize(Roles = "Admin")] // Restrict access to Admins only
         [HttpDelete("{id}")]
         public IActionResult DeleteRacer(int id)
         {
             try
-            {
+            {// Restrict access to Admins only
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
+
                 _racerService.DeleteRacer(id);
                 return Ok("Racer deleted successfully.");
             }

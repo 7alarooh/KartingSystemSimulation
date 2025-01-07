@@ -2,6 +2,8 @@
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Authorization; // For role-based authorization
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace KartingSystemSimulation.Controllers
 {
@@ -20,10 +22,17 @@ namespace KartingSystemSimulation.Controllers
         /// Get all admins (Admin only).
         /// </summary>
         /// <returns>List of AdminOutputDTO</returns>
-        [Authorize(Roles = "Admin")] // Restrict access to Admin role only
+        // Restrict access to Admin role only
         [HttpGet]
         public IActionResult GetAll()
         {
+            string token = JwtHelper.ExtractToken(Request);
+            var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+            var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+            // Validate role
+            if (role != "Admin")
+                return Forbid("Only Admins can access this resource.");
             // Retrieve all admins from the service layer
             var admins = _adminService.GetAll();
 
@@ -36,12 +45,18 @@ namespace KartingSystemSimulation.Controllers
         /// </summary>
         /// <param name="id">Admin ID</param>
         /// <returns>AdminOutputDTO</returns>
-        [Authorize(Roles = "Admin")] // Restrict access to Admin role only
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             try
             {
+                string token = JwtHelper.ExtractToken(Request);
+                var email = JwtHelper.GetClaimValue(token, JwtRegisteredClaimNames.Email);
+                var role = JwtHelper.GetClaimValue(token, ClaimTypes.Role);
+
+                // Validate role
+                if (role != "Admin")
+                    return Forbid("Only Admins can access this resource.");
                 // Retrieve the admin with the specified ID from the service layer
                 var admin = _adminService.GetById(id);
 
