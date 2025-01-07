@@ -35,6 +35,8 @@ namespace KartingSystemSimulation.Controllers
         [HttpPost("AddRacer")]
         [Authorize(Roles = "Admin,Supervisor,Racer")] // Allow Admins, Supervisors, and Racers
         [HttpPost("AddRacer")]
+        [Authorize(Roles = "Admin,Supervisor,Racer")] // Allow Admins, Supervisors, and Racers
+        [HttpPost("AddRacer")]
         public IActionResult AddRacer([FromBody] RacerInputDTO racerInput)
         {
             if (!ModelState.IsValid)
