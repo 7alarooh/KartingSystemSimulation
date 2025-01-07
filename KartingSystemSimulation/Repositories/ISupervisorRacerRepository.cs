@@ -9,5 +9,6 @@ namespace KartingSystemSimulation.Repositories
         IEnumerable<SupervisorRacer> GetAllSupervisorRacers();
         SupervisorRacer GetSupervisorRacerById(int supervisorId, int racerId);
        
+        
     }
 }

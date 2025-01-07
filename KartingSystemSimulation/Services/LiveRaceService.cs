@@ -9,13 +9,11 @@ namespace KartingSystemSimulation.Services
     {
         private readonly ILiveRaceRepository _liveRaceRepository;
         private readonly IGameRepository _gameRepository;
-        private readonly IRacerService _RacerService;
 
-        public LiveRaceService(ILiveRaceRepository liveRaceRepository, IGameRepository gameRepository, IRacerService racerService)
+        public LiveRaceService(ILiveRaceRepository liveRaceRepository, IGameRepository gameRepository)
         {
             _liveRaceRepository = liveRaceRepository;
             _gameRepository = gameRepository;
-            _RacerService = racerService;
         }
 
         // Get all live races

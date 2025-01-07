@@ -1,6 +1,8 @@
 ﻿using KartingSystemSimulation.DTOs;
 using KartingSystemSimulation.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KartingSystemSimulation.Controllers
@@ -17,7 +19,8 @@ namespace KartingSystemSimulation.Controllers
             _kartService = kartService; // Initialize the kart service
         }
 
-        // Add a new kart
+        // Add a new kart (Admin only)
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult AddKart([FromBody] KartInputDTO kartInput)
         {
