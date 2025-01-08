@@ -143,12 +143,12 @@ namespace KartingSystemSimulation
                 .WithMany()
                 .HasForeignKey(rr => rr.RacerId)
                 .OnDelete(DeleteBehavior.Restrict);
-            //// Racer to Membership: One-to-One relationship
-            //modelBuilder.Entity<Membership>()
-            //    .HasOne<Racer>() // Each Membership is associated with one Racer
-            //    .WithOne(r => r.Membership) // Each Racer has one Membership
-            //    .HasForeignKey<Membership>(m => m.RacerId) // RacerId is the foreign key in Membership
-            //    .OnDelete(DeleteBehavior.Cascade); // Cascade delete when Racer is deleted
+            // Racer to Membership: One-to-One relationship
+            modelBuilder.Entity<Membership>()
+                .HasOne<Racer>() // Each Membership is associated with one Racer
+                .WithOne(r => r.Membership) // Each Racer has one Membership
+                .HasForeignKey<Membership>(m => m.RacerId) // RacerId is the foreign key in Membership
+                .OnDelete(DeleteBehavior.Cascade); // Cascade delete when Racer is deleted
 
             base.OnModelCreating(modelBuilder);
         }

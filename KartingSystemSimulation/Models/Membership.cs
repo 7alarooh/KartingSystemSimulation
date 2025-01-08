@@ -11,8 +11,8 @@ namespace KartingSystemSimulation.Models
         [Key]
         public int MembershipId { get; set; } // Primary Key
 
-        [Required]
-        [ForeignKey(nameof(Racer))] // Map RacerId to Racer navigation
+        //[Required]
+        //[ForeignKey(nameof(Racer))] // Map RacerId to Racer navigation
         public int RacerId { get; set; } // Foreign key to Racer entity
 
         [Required]
@@ -25,7 +25,7 @@ namespace KartingSystemSimulation.Models
         public DateTime EndDate { get; set; }
         public int FreeTickets { get; set; }
         public decimal DiscountPercentage { get; set; }
-       [JsonIgnore]
+        [JsonIgnore]
         public Racer Racer { get; set; } // Navigation property to Racer
     }
 }
