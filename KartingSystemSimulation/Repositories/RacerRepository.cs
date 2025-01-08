@@ -28,6 +28,13 @@ namespace KartingSystemSimulation.Repositories
             _context.Racers.Remove(racer);
             _context.SaveChanges();
         }
+        public IEnumerable<Supervisor> GetRelatedSupervisors(int racerId)
+        {
+            return _context.SupervisorRacers
+                           .Where(sr => sr.RacerId == racerId)
+                           .Select(sr => sr.Supervisor)
+                           .ToList();
+        }
     }
 
 }

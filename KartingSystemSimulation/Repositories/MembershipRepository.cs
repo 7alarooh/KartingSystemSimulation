@@ -45,5 +45,14 @@ namespace KartingSystemSimulation.Repositories
             _context.Memberships.Remove(membership); // Remove the membership entity from the database
             _context.SaveChanges(); // Save changes to the database
         }
+        public IEnumerable<Supervisor> GetRelatedSupervisors(int racerId)
+        {
+            return _context.SupervisorRacers
+                           .Where(sr => sr.RacerId == racerId)
+                           .Select(sr => sr.Supervisor)
+                           .ToList();
+        }
+
+
     }
 }
