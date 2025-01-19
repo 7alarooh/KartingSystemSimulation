@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "I3g8fSbSq0JTKMts8gef062/a3Kazwk1qYqT3NgVu2Y=",
+  "Hash": "L91Ru2QaKMvE//05gsEq3hICqfoI/FrBh8y8Tuq1oaI=",
   "Source": "KartingSystemSimulation",
   "BasePath": "_content/KartingSystemSimulation",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

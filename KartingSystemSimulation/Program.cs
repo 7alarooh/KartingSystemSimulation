@@ -90,10 +90,10 @@ namespace KartingSystemSimulation
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
+                c.SwaggerDoc("v2", new OpenApiInfo
                 {
                     Title = "Karting System Simulation API",
-                    Version = "v1",
+                    Version = "v2",
                     Description = "API Documentation for the Karting System Simulation Project",
                     Contact = new OpenApiContact
                     {
@@ -133,7 +133,7 @@ namespace KartingSystemSimulation
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                 {
-                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Karting System Simulation API v1");
+                    c.SwaggerEndpoint("/swagger/v2/swagger.json", "Karting System Simulation API v1");
 
                 });
             }

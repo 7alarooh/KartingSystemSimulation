@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KartingSystemSimulation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250105151213_FreshSetup")]
-    partial class FreshSetup
+    [Migration("20250119093725_freshSetup")]
+    partial class freshSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

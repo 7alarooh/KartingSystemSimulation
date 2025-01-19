@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace KartingSystemSimulation.Migrations
 {
     /// <inheritdoc />
-    public partial class FreshSetup : Migration
+    public partial class freshSetup : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -386,7 +386,7 @@ namespace KartingSystemSimulation.Migrations
                         column: x => x.LeaderboardId,
                         principalTable: "Leaderboards",
                         principalColumn: "LeaderboardId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_RaceHistoryLeaderboards_RaceHistories_RaceHistoryId",
                         column: x => x.RaceHistoryId,
